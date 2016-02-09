@@ -365,10 +365,10 @@ uint32_t librpipTransactionDestroy(struct librpip_transaction_t* t) {
 			struct librpip_msg_t* m = t->last_msg;
 			struct librpip_msg_t* p = 0;
 		
-			for(i=0;i<t->len;i++) {   					// is a while(m) better thing to do here?
-				p = m->prev;  							// get the previous message pointer before we start destroying things
+			for(i=0;i<t->len;i++) {   			// is a while(m) better thing to do here?
+				p = m->prev;  				// get the previous message pointer before we start destroying things
 				librpip_transaction_message_destroy(m);	// destroy it
-				m = p;									// move the pointer to the message before
+				m = p;					// move the pointer to the message before
 			}
 		}
 		free(t);	

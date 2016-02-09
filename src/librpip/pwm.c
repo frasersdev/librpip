@@ -399,7 +399,7 @@ uint32_t librpipServoPositionWrite(uint32_t id, float angle) {
 	librpip_error_code=0;
 	librpip_error_data=0;
 	
-	uint32_t ps;
+	uint32_t ns;
 	float us_per_degree, us, a, aa;
 	
 	a=(float)librpip_servo_config[id][LIBRPIP_SERVO_RANGE]/2.0;
@@ -431,10 +431,10 @@ uint32_t librpipServoPositionWrite(uint32_t id, float angle) {
 		us_per_degree = ((float)librpip_servo_config[id][LIBRPIP_SERVO_PMAX] - (float)librpip_servo_config[id][LIBRPIP_SERVO_PMIN]) / (float)librpip_servo_config[id][LIBRPIP_SERVO_RANGE];
 		aa = angle+a; //shift the angle so zero degrees is pmin instead of centre
 		us = (aa*us_per_degree) + (float)librpip_servo_config[id][LIBRPIP_SERVO_PMIN]; // calculate us as a float so we can scale to ps without losing digits - seriously does any servo actually respond to 4 sig figs?
-		ps = (uint32_t)(us*1000); //convert to ps then unit32.
+		ns = (uint32_t)(us*1000); //convert to ns then unit32.
 
 		librpip_pwm_period_set(id, 20000000); //20ms	
-		librpip_pwm_dutycycle_set(id, ps);
+		librpip_pwm_dutycycle_set(id, ns);
 	}
 
 	if(librpip_error_code) {

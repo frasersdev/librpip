@@ -24,16 +24,16 @@
 
 
 //dev files
-#define LIBRPIP_DEV_GPIO 				"/dev/gpiomem"
-#define LIBRPIP_DEV_UART0				"/dev/ttyAMA0"	
-#define LIBRPIP_DEV_UART1				"/dev/ttyAMA1"		
-#define LIBRPIP_DEV_I2C0 				"/dev/i2c-0"
-#define LIBRPIP_DEV_I2C1 				"/dev/i2c-1"
-#define LIBRPIP_DEV_SPI0_CS0			"/dev/spidev0.0"
-#define LIBRPIP_DEV_SPI0_CS1			"/dev/spidev0.1"
-#define LIBRPIP_DEV_SPI1_CS0			"/dev/spidev1.0"
-#define LIBRPIP_DEV_SPI1_CS1			"/dev/spidev1.1"
-#define LIBRPIP_DEV_SPI1_CS2			"/dev/spidev1.2"
+#define LIBRPIP_DEV_GPIO 		"/dev/gpiomem"
+#define LIBRPIP_DEV_UART0		"/dev/ttyAMA0"	
+#define LIBRPIP_DEV_UART1		"/dev/ttyAMA1"		
+#define LIBRPIP_DEV_I2C0 		"/dev/i2c-0"
+#define LIBRPIP_DEV_I2C1 		"/dev/i2c-1"
+#define LIBRPIP_DEV_SPI0_CS0		"/dev/spidev0.0"
+#define LIBRPIP_DEV_SPI0_CS1		"/dev/spidev0.1"
+#define LIBRPIP_DEV_SPI1_CS0		"/dev/spidev1.0"
+#define LIBRPIP_DEV_SPI1_CS1		"/dev/spidev1.1"
+#define LIBRPIP_DEV_SPI1_CS2		"/dev/spidev1.2"
 
 // the PWM kernel module does not create a device file for userspace access. :(
 // however we can use what we find in /sys so long as it has been configured for use.
@@ -44,16 +44,16 @@
 
 
 //ID's
-#define LIBRPIP_DEV_GPIO_ID				1 
-#define LIBRPIP_DEV_UART0_ID			2 
-#define LIBRPIP_DEV_UART1_ID			3
-#define LIBRPIP_DEV_I2C0_ID 			4
-#define LIBRPIP_DEV_I2C1_ID 			5
-#define LIBRPIP_DEV_SPI0_CS0_ID			6
-#define LIBRPIP_DEV_SPI0_CS1_ID			7
-#define LIBRPIP_DEV_SPI1_CS0_ID			8
-#define LIBRPIP_DEV_SPI1_CS1_ID			9
-#define LIBRPIP_DEV_SPI1_CS2_ID			10
+#define LIBRPIP_DEV_GPIO_ID		1 
+#define LIBRPIP_DEV_UART0_ID		2 
+#define LIBRPIP_DEV_UART1_ID		3
+#define LIBRPIP_DEV_I2C0_ID 		4
+#define LIBRPIP_DEV_I2C1_ID 		5
+#define LIBRPIP_DEV_SPI0_CS0_ID		6
+#define LIBRPIP_DEV_SPI0_CS1_ID		7
+#define LIBRPIP_DEV_SPI1_CS0_ID		8
+#define LIBRPIP_DEV_SPI1_CS1_ID		9
+#define LIBRPIP_DEV_SPI1_CS2_ID		10
 
 
 

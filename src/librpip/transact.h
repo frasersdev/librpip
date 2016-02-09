@@ -22,21 +22,21 @@
 #ifndef LIBRPIP_TX_H
 #define LIBRPIP_TX_H
 
-#define LIBRPIP_TX_NOBUF			0x0	
+#define LIBRPIP_TX_NOBUF		0x0	
 
 #define LIBRPIP_TX_STATUS_NEW		0x1	
 #define LIBRPIP_TX_STATUS_MSG		0x2	
 #define LIBRPIP_TX_STATUS_SENTOK	0x3	
 #define LIBRPIP_TX_STATUS_FAILED	0x4	
 
-#define LIBRPIP_TX_MODE_I2C			0x1	
-#define LIBRPIP_TX_MODE_SPI			0x2
+#define LIBRPIP_TX_MODE_I2C		0x1	
+#define LIBRPIP_TX_MODE_SPI		0x2
 #define LIBRPIP_TX_MODE_SPI_3W		0x3
 #define LIBRPIP_TX_MODE_UART		0x4	
 
-#define LIBRPIP_TX_MSG_TX			0x1	
-#define LIBRPIP_TX_MSG_RX			0x2	
-#define LIBRPIP_TX_MSG_TXRX			(LIBRPIP_TX_MSG_TX | LIBRPIP_TX_MSG_RX)	
+#define LIBRPIP_TX_MSG_TX		0x1	
+#define LIBRPIP_TX_MSG_RX		0x2	
+#define LIBRPIP_TX_MSG_TXRX		(LIBRPIP_TX_MSG_TX | LIBRPIP_TX_MSG_RX)	
 
 
 
@@ -68,25 +68,25 @@ struct librpip_transaction_t {
 
 //exposed functions
 struct librpip_transaction_t* 	librpipTransactionCreate(uint8_t mode, uint8_t bpw);
-uint32_t 						librpipTransactionMsgAdd(struct librpip_transaction_t* t, uint8_t dir, void* txbuf, uint16_t len);
-uint32_t 						librpipTransactionMsgAddRegRead(struct librpip_transaction_t* t, uint8_t reg, uint16_t len);
-uint32_t 						librpipTransactionMsgAddRegWrite(struct librpip_transaction_t* t, uint8_t reg, uint8_t value);
-uint32_t 						librpipTransactionMsgVarAdd(struct librpip_transaction_t* t, uint8_t dir, char var);
-uint32_t 						librpipTransactionMsgVarSet(struct librpip_transaction_t* t, char var,  void* txbuf, uint16_t len);
-uint32_t 						librpipTransactionSend(struct librpip_transaction_t* t, uint32_t device, uint32_t client);
-uint32_t						librpipTransactionRead(struct librpip_transaction_t* t, void* result, uint16_t len);
-uint32_t 						librpipTransactionDestroy(struct librpip_transaction_t* t);
+uint32_t 			librpipTransactionMsgAdd(struct librpip_transaction_t* t, uint8_t dir, void* txbuf, uint16_t len);
+uint32_t 			librpipTransactionMsgAddRegRead(struct librpip_transaction_t* t, uint8_t reg, uint16_t len);
+uint32_t 			librpipTransactionMsgAddRegWrite(struct librpip_transaction_t* t, uint8_t reg, uint8_t value);
+uint32_t 			librpipTransactionMsgVarAdd(struct librpip_transaction_t* t, uint8_t dir, char var);
+uint32_t 			librpipTransactionMsgVarSet(struct librpip_transaction_t* t, char var,  void* txbuf, uint16_t len);
+uint32_t 			librpipTransactionSend(struct librpip_transaction_t* t, uint32_t device, uint32_t client);
+uint32_t			librpipTransactionRead(struct librpip_transaction_t* t, void* result, uint16_t len);
+uint32_t 			librpipTransactionDestroy(struct librpip_transaction_t* t);
 
 //internal functions
-void 							librpip_transaction_msg_var_check(struct librpip_transaction_t* t);
+void 				librpip_transaction_msg_var_check(struct librpip_transaction_t* t);
 //these create the actual xfer structure as needed by the kernel modules
-struct spi_ioc_transfer* 		librpip_transaction_spi_create(struct librpip_transaction_t* t);
+struct spi_ioc_transfer* 	librpip_transaction_spi_create(struct librpip_transaction_t* t);
 struct i2c_rdwr_ioctl_data* 	librpip_transaction_i2c_create(struct librpip_transaction_t* t, uint32_t client);
 //utility functions
 struct librpip_msg_buffer_t* 	librpip_transaction_buffer_create(uint8_t* buf,uint16_t len);
-void 							librpip_transaction_message_destroy(struct librpip_msg_t* m);
-void 							librpip_transaction_buffer_destroy(struct librpip_msg_buffer_t* b);
-void 							librpip_transaction_spi_destroy(struct spi_ioc_transfer* spi);
-void 							librpip_transaction_i2c_destroy(struct i2c_rdwr_ioctl_data* i2c);
+void 				librpip_transaction_message_destroy(struct librpip_msg_t* m);
+void 				librpip_transaction_buffer_destroy(struct librpip_msg_buffer_t* b);
+void 				librpip_transaction_spi_destroy(struct spi_ioc_transfer* spi);
+void 				librpip_transaction_i2c_destroy(struct i2c_rdwr_ioctl_data* i2c);
 
 #endif

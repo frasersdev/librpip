@@ -112,10 +112,10 @@ uint32_t librpip_uart_init(uint32_t id) {
 	if(librpip_error_code==0) {
 		if(!(librpip_flags & LIBRPIP_FLAG_NO_RESET)) {
 			librpip_uart_config_set(&librpip_uart_dev[id], 	LIBRPIP_UART_BAUD_19200, 
-															LIBRPIP_UART_SIZE_8, 
-															LIBRPIP_UART_PARITY_OFF, 
-															LIBRPIP_UART_STOPBITS_1, 
-															LIBRPIP_UART_MODE_ASCII);
+									LIBRPIP_UART_SIZE_8, 
+									LIBRPIP_UART_PARITY_OFF, 
+									LIBRPIP_UART_STOPBITS_1, 
+									LIBRPIP_UART_MODE_ASCII);
 			librpip_uart_frag_wait[id] = librpip_uart_frag_wait_calc(LIBRPIP_UART_BAUD_19200);
 		} 
 	}	
