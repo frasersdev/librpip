@@ -25,6 +25,10 @@
 
 /*
  * A little example that pulses pwm0 and moves a servo on pwm1 
+ *
+ * You will need to have enabled by PWM by following these instructions:
+ * http://librpip.frasersdev.net/peripheral-config/pwm0and1/
+ *
  */
 
 void display_feature_set(uint32_t fs);
