@@ -1,27 +1,26 @@
 librpip - A Library for Using Raspberry Pi Peripherals in Userland.
 
 Documentation
--------------
+=============
 
 Documentation is at http://librpip.frasersdev.net/documentation/
 To get the most of of librpip you will need to configure the peripherals on your Raspberry P. See http://librpip.frasersdev.net/peripheral-config/ for details. Librpip will detect and use whatever hardware has been made available.
 
 
 Download
---------
+========
 
 Download the current release from http://librpip.frasersdev.net/get/download/
 
 
 Installation
-------------
+============
 
 The Library installs into /usr/local/*. Edit the Makefile to install into other locations.
 
 Extract the tarball:
 $ tar xvzf librpip-x.y.z.tar.gz
 $ cd librpip-x.y.z
-
 
 Then build and install:
 $ ./configure
