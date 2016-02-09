@@ -1,0 +1,22 @@
+librpip - A Library for Using Raspberry Pi Peripherals in Userland.
+
+
+Installation
+------------
+
+The Library installs into /usr/local/*. Edit the Makefile to install into other locations.
+
+To build and install run the following
+$ ./configure
+$ make 
+$ sudo make install
+
+Then optionally make the examples
+$ make examples
+
+
+Documentation
+-------------
+
+http://librpip.frasersdev.net
+

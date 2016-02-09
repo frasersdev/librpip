@@ -1,0 +1,20 @@
+AC_INIT(librpip, version-0.1.0)
+
+AC_PROG_CC
+AC_CHECK_HEADER(errno.h)
+AC_CHECK_HEADER(fcntl.h)
+AC_CHECK_HEADER(stdint.h)
+AC_CHECK_HEADER(stdio.h)
+AC_CHECK_HEADER(stdlib.h)
+AC_CHECK_HEADER(string.h)
+AC_CHECK_HEADER(termios.h)
+AC_CHECK_HEADER(unistd.h)
+AC_CHECK_HEADER(linux/i2c.h)
+AC_CHECK_HEADER(linux/i2c-dev.h)
+AC_CHECK_HEADER(linux/spi/spidev.h)
+AC_CHECK_HEADER(sys/ioctl.h)
+AC_CHECK_HEADER(sys/mman.h)
+AC_CHECK_HEADER(sys/stat.h)
+AC_CHECK_HEADER(sys/types.h)
+AC_CHECK_MEMBERS(struct spi_ioc_transfer.tx_nbits,AC_DEFINE(LIBRPIP_HAVE_SPI_STRUCT_NBITS),,[#include <linux/spi/spidev.h>])
+cp confdefs.h src/librpip/config.h

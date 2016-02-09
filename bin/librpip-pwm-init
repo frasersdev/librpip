@@ -1,0 +1,15 @@
+#!/bin/sh
+
+#start the PWM clock with our binary
+/usr/local/bin/librpip-util/pwmclk
+
+#start the PWM clock by sending some audio :-/
+#speaker-test -Dhw:CARD=ALSA,DEV=0 -f300 -c1 -p100 -P2 -l1 > /dev/null 2>&1
+
+#enable the PWM(s). Try both in leu of parsing config.txt.
+echo "0" > /sys/class/pwm/pwmchip0/export 
+echo "1" > /sys/class/pwm/pwmchip0/export 
+
+#configure the PWM(s)
+chgrp pwm /sys/class/pwm/pwmchip0/pwm?/*
+chmod 660 /sys/class/pwm/pwmchip0/pwm?/*
