@@ -1,4 +1,5 @@
 librpip - A Library for Using Raspberry Pi Peripherals in Userland.
+The library provides a way for non-privileged accounts (ie non-root) to access the peripherals such as i2c, spi, uarts and the gpio on a Raspberry PI. 
 
 Documentation
 =============
