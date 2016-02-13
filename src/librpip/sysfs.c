@@ -37,6 +37,9 @@ uint32_t librpip_sysfs_node_exists(uint32_t sysfsid) {
 	int result;
 
     switch(sysfsid) {
+		case LIBRPIP_SYSFS_PWM_MODULE_ID:						
+			result=stat(LIBRPIP_SYSFS_PWM_MODULE,&fileStat);
+			break;
 		case LIBRPIP_SYSFS_PWM0_ID:						
 			result=stat(LIBRPIP_SYSFS_PWM0,&fileStat);
 			break;

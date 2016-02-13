@@ -25,6 +25,7 @@
 
 
 //sysfs files
+#define LIBRPIP_SYSFS_PWM_MODULE	"/sys/class/pwm/pwmchip0"
 #define LIBRPIP_SYSFS_PWM0		"/sys/class/pwm/pwmchip0/pwm0"
 #define LIBRPIP_SYSFS_PWM1		"/sys/class/pwm/pwmchip0/pwm1"
 
@@ -35,8 +36,9 @@
 #define LIBRPIP_SYSFS_PWM_POLARITY	"polarity"
 
 //id's for accessing above files
-#define LIBRPIP_SYSFS_PWM0_ID		1 
-#define LIBRPIP_SYSFS_PWM1_ID		2
+#define LIBRPIP_SYSFS_PWM_MODULE_ID	1 
+#define LIBRPIP_SYSFS_PWM0_ID		2 
+#define LIBRPIP_SYSFS_PWM1_ID		3
 
 #define LIBRPIP_SYSFS_PWM_DUTYCYCLE_ID	1
 #define LIBRPIP_SYSFS_PWM_ENABLE_ID	2
