@@ -26,7 +26,8 @@
 #include <librpip.h>
 
 /*
- * A little example that initialises librpip and shows what features got enabled 
+ * A little example that initialises librpip and shows what features got enabled.
+ * This example is a good test for peripheral configuration.
  */
 
 void display_feature_set(uint32_t fs);
