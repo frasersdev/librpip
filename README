@@ -1,11 +1,19 @@
 librpip - A Library for Using Raspberry Pi Peripherals in User Space.
+
 The library provides a way for non-privileged accounts (ie non-root) to access the peripherals such as i2c, spi, uarts and the gpio on a Raspberry PI. 
+It has been tested on Arch Linux Arm (v7) 4.1, Raspbian Jessie 4.1 and Raspbian Wheezy 3.18.
 
 Documentation
 =============
 
-Documentation is at http://librpip.frasersdev.net/documentation/
-To get the most of of librpip you will need to configure the peripherals on your Raspberry P. See http://librpip.frasersdev.net/peripheral-config/ for details. Librpip will detect and use whatever hardware has been made available.
+Library documentation is at http://librpip.frasersdev.net/documentation/
+By default librpip will have very little if any access to peripherals. 
+You will need to configure the os and the peripherals on your Raspberry Pi. See:
+
+ * http://librpip.frasersdev.net/linux/  
+ * http://librpip.frasersdev.net/peripheral-config/ 
+  
+Librpip will detect and use whatever hardware has been made available via kernel modules
 
 
 Download

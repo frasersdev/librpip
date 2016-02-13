@@ -218,7 +218,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			
 //PWM			
 		case 0x400:
-			snprintf(desc, len, "[librpip INFO   ] No PWM%u functions available. /sys/class/pwm/pwmchip0/pwm%u/* does not exist (PWM disabled, kernel module not loaded or PWM not exported?). Pins are available to GPIO\n", librpip_error_data, librpip_error_data);
+			snprintf(desc, len, "[librpip INFO   ] No PWM%u functions available. /sys/class/pwm/pwmchip0/pwm%u/* does not exist (PWM init script not run?). Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
 			break;	
 		case 0x401:
 			snprintf(desc, len, "[librpip ERROR  ] No PWM%u functions available. Unable to open /sys/class/pwm/pwmchip0/pwm%u/* for writing (user permissions?). Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
@@ -240,6 +240,9 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			break;
 		case 0x407:
 			snprintf(desc, len, "[librpip INFO   ] No PWM%u functions available. Skipping initialisation as instructed. Pins NOT available to GPIO\n", librpip_error_data);
+			break;
+		case 0x408:
+			snprintf(desc, len, "[librpip INFO   ] No PWM%u functions available. PWM module is not running. Pins are available to GPIO\n", librpip_error_data);
 			break;
 		case 0x410:
 			snprintf(desc, len, "[librpip ERROR  ] Error reading config for PWM%u. Opening file /sys/class/pwm/pwmchip0/pwm%u/duty_cycle caused errno 0x%x (%s).\n", librpip_error_data, librpip_error_data, librpip_error_extra, strerror(librpip_error_extra));

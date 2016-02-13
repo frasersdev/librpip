@@ -1,0 +1,11 @@
+[Unit]
+Description=Enables PWMs for use
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/librpip-util/librpip-pwm-init
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

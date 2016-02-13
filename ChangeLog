@@ -1,3 +1,9 @@
+0.2.0
+Released  13/2/2016
+
+* Support for Arch linux Arm (v7) on Raspberry Pi 2 B
+* Better error messages when PWM module is not running or PWM is running but not enabled for users.
+
 0.1.1
 Released  9/2/2016
 

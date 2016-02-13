@@ -55,51 +55,56 @@ uint32_t librpip_pwm_init(uint32_t id) {
 	librpip_error_code=0;
 	librpip_error_data=0;
 	
-	switch(id) {
-		case 0:
-			if(librpip_sysfs_node_exists(LIBRPIP_SYSFS_PWM0_ID)) {
-			   	librpip_pwm_dodisco[0]=1; //we have to wait for GPIO to initialise before we can do discovery //yuk
-				if(librpip_flags & LIBRPIP_FLAG_SKIP_PWM0) { //we have been asked not not use PWM0
-					librpip_error_code=0x407;					
-					librpip_error_data=id;
-				} else {
-					if(librpip_sysfs_node_file_validate(LIBRPIP_SYSFS_PWM0_ID)) {
-						librpip_feature_set |= LIBRPIP_FEATURE_PWM0;  //sysfs files all exist exists and we can RW them
-					} else {
-						librpip_error_code=0x401;					//device exists but we cant RW it
+	if(librpip_sysfs_node_exists(LIBRPIP_SYSFS_PWM_MODULE_ID)) {
+		switch(id) {
+			case 0:
+				librpip_pwm_dodisco[0]=1; //we have to wait for GPIO to initialise before we can do discovery //yuk
+				if(librpip_sysfs_node_exists(LIBRPIP_SYSFS_PWM0_ID)) {
+					if(librpip_flags & LIBRPIP_FLAG_SKIP_PWM0) { //we have been asked not not use PWM0
+						librpip_error_code=0x407;					
 						librpip_error_data=id;
-					}
-				}
-			} else {
-				librpip_pwm_dodisco[0]=0;
-				librpip_error_code=0x400;						//device does not exist, pins are not is use
-				librpip_error_data=id;
-			}
-			break;
-		case 1:
-			if(librpip_sysfs_node_exists(LIBRPIP_SYSFS_PWM1_ID)) {
-			   	librpip_pwm_dodisco[1]=1; //we have to wait for GPIO to initialise before we can do discovery //yuk
-				if(librpip_flags & LIBRPIP_FLAG_SKIP_PWM1) { //we have been asked not not use PWM1
-					librpip_error_code=0x407;					
-					librpip_error_data=id;
-				} else {
-					if(librpip_sysfs_node_file_validate(LIBRPIP_SYSFS_PWM1_ID)) {
-						librpip_feature_set |= LIBRPIP_FEATURE_PWM1;  //sysfs files all exist exists and we can RW them
 					} else {
-						librpip_error_code=0x401;					//device exists but we cant RW it
-						librpip_error_data=id;
+						if(librpip_sysfs_node_file_validate(LIBRPIP_SYSFS_PWM0_ID)) {
+							librpip_feature_set |= LIBRPIP_FEATURE_PWM0;  //sysfs files all exist exists and we can RW them
+						} else {
+							librpip_error_code=0x401;					//device exists but we cant RW it
+							librpip_error_data=id;
+						}
 					}
+				} else {
+					librpip_error_code=0x400;						//module is running, pins are is use
+					librpip_error_data=id;
 				}
-			} else {
-				librpip_pwm_dodisco[1]=0;
-				librpip_error_code=0x400;						//device does not exist, pins are not is use
+				break;
+			case 1:
+				librpip_pwm_dodisco[1]=1; //we have to wait for GPIO to initialise before we can do discovery //yuk
+				if(librpip_sysfs_node_exists(LIBRPIP_SYSFS_PWM1_ID)) {
+					if(librpip_flags & LIBRPIP_FLAG_SKIP_PWM1) { //we have been asked not not use PWM1
+						librpip_error_code=0x407;					
+						librpip_error_data=id;
+					} else {
+						if(librpip_sysfs_node_file_validate(LIBRPIP_SYSFS_PWM1_ID)) {
+							librpip_feature_set |= LIBRPIP_FEATURE_PWM1;  //sysfs files all exist exists and we can RW them
+						} else {
+							librpip_error_code=0x401;				//device exists but we cant RW it
+							librpip_error_data=id;
+						}
+					}
+				} else {
+					librpip_error_code=0x400;						//module is running, pins are is use
+					librpip_error_data=id;
+				}
+				break;
+			default:
+				librpip_error_code=0x402;
 				librpip_error_data=id;
-			}
-			break;
-		default:
-			librpip_error_code=0x402;
-			librpip_error_data=id;
-			break;
+				break;
+		}
+	} else {
+		librpip_pwm_dodisco[0]=0; 	//setting all pwms to no discovery
+		librpip_pwm_dodisco[1]=0; 
+		librpip_error_code=0x408;	//module is not running, pins are not in use
+		librpip_error_data=id;
 	}
 
 	if(!librpip_error_code) {
