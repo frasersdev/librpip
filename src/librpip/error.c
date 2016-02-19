@@ -337,7 +337,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			snprintf(desc, len, "[librpip WARNING] Ignoring request to transmit a transaction that has unset variable segments.\n");
 			break;
 		case 0x530:
-			snprintf(desc, len, "[librpip WARNING] Ignoring request read from a transaction that has not been initialised.\n");
+			snprintf(desc, len, "[librpip WARNING] Ignoring request to read from a transaction that has not been initialised.\n");
 			break;
 		case 0x531:
 			snprintf(desc, len, "[librpip WARNING] No data to return. Could not find another message segment to read from in the transaction.\n");
@@ -346,7 +346,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			snprintf(desc, len, "[librpip WARNING] No data to return. Could not find a message segment to read from in the transaction.\n");
 			break;
 		case 0x533:
-			snprintf(desc, len, "[librpip WARNING] Ignoring request read from a transaction that has not been sent. Status is %u\n", librpip_error_data);
+			snprintf(desc, len, "[librpip WARNING] Ignoring request to read from a transaction that has not been sent. Status is %u\n", librpip_error_data);
 			break;
 		case 0x540:
 			snprintf(desc, len, "[librpip WARNING] Ignoring request to destroy transaction. It has not been initialised.\n");
@@ -354,10 +354,10 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 
 //Uarts			
 		case 0x600:
-			snprintf(desc, len, "[librpip INFO   ] No UART%u functions available. /dev/ttyAMA%u does not exist (kernel module not loaded?).\n", librpip_error_data, librpip_error_data);
+			snprintf(desc, len, "[librpip INFO   ] No UART%u functions available. /dev/ttyAMA0 does not exist (kernel module not loaded?).\n", librpip_error_data);
 			break;	
 		case 0x601:
-			snprintf(desc, len, "[librpip WARNING] No UART%u functions available. Unable to open /dev/ttyAMA%u for writing (user permissions or in use by console?). Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
+			snprintf(desc, len, "[librpip WARNING] No UART%u functions available. Unable to open /dev/ttyAMA0 for writing (user permissions or in use by console?). Pins NOT available to GPIO\n", librpip_error_data);
 			break;
 		case 0x602:
 			snprintf(desc, len, "[librpip ERROR  ] Invalid UART device number %u.\n", librpip_error_data);
@@ -370,7 +370,13 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			break;	
 		case 0x605:
 			snprintf(desc, len, "[librpip WARNING] Ignoring request. No UART%u functions available as it was not initialised.\n", librpip_error_data);
+			break;
+		case 0x606:
+			snprintf(desc, len, "[librpip INFO   ] No UART%u functions available. /dev/ttyS0 does not exist (kernel module not loaded?).\n", librpip_error_data);
 			break;	
+		case 0x607:
+			snprintf(desc, len, "[librpip WARNING] No UART%u functions available. Unable to open /dev/ttyS0 for writing (user permissions or in use by console?). Pins NOT available to GPIO\n", librpip_error_data);
+			break;				
 		case 0x610:
 			snprintf(desc, len, "[librpip ERROR  ] Unable to read configuration of UART%u. The Error was 0x%x (%s).\n", librpip_error_data, librpip_error_extra, strerror(librpip_error_extra));
 			break;
