@@ -36,6 +36,12 @@
 
 
 void show_uart_config(uint32_t id);
+void setup_transaction();
+void uart_ascii(uint32_t id);
+void uart_binary(uint32_t id);
+void uart_transaction(uint32_t id);
+
+struct librpip_tx* t;
 
 int main(int argc, char * argv[]) {
 
@@ -48,65 +54,22 @@ int main(int argc, char * argv[]) {
 	if(feature_set == 0) {
 		fprintf(stdout,"librpip failed to initialise!\n");
 	} else {
-	
+		setup_transaction();
 		if(feature_set & LIBRPIP_FEATURE_UART0) {
-
-			char inbufchar[50], outbufchar[50];		
-			uint8_t inbufint[50],outbufint[50];
-			
-			//ascii mode
-			fprintf(stdout,"ASCII Mode\n"); 
-			librpipUartConfigWrite(0, LIBRPIP_UART_BAUD_115200,8, 0, 1, LIBRPIP_UART_MODE_ASCII);	
-			show_uart_config(0);
-			
-			strcpy(outbufchar,"This is a test. And this is a longer test.");
-			fprintf(stdout,"Out: %s\n",outbufchar); 
-			librpipUartWrite(0, &outbufchar[0], strlen(outbufchar));
-			librpipUartRead(0, &inbufchar[0], sizeof(inbufchar),0);  
-			fprintf(stdout,"In: %s\n\n",inbufchar); 
-			
-			//binary mode
-			fprintf(stdout,"Binary Mode\n"); 			
-			librpipUartConfigWrite(0, LIBRPIP_UART_BAUD_115200,8, 0, 1, LIBRPIP_UART_MODE_BINARY);	
-			show_uart_config(0);			
-					
-			outbufint[0]=0xff;
-			outbufint[1]=0xbe;
-			outbufint[2]=0xaf;
-			outbufint[3]=0x00;
-		
-			fprintf(stdout,"Out: 0x%x 0x%x 0x%x 0x%x\n",outbufint[0],outbufint[1],outbufint[2],outbufint[3]); 
-			librpipUartWrite(0, &outbufint[0], 4);
-			librpipUartRead(0, &inbufint[0], 4 ,0);  
-			fprintf(stdout,"In: 0x%x 0x%x 0x%x 0x%x\n\n",inbufint[0],inbufint[1],inbufint[2],inbufint[3]); 
-		
-			//as a transaction
-			fprintf(stdout,"As a transaction\n"); 
-			librpipUartConfigWrite(0, LIBRPIP_UART_BAUD_115200,8, 0, 1, LIBRPIP_UART_MODE_ASCII);
-			show_uart_config(0);
-				
-			//create the transaction
-			struct librpip_tx* t = librpipTransactionCreate(LIBRPIP_TX_MODE_UART,8);
-			librpipTransactionMsgVarAdd(t, LIBRPIP_TX_MSG_TX, 'a');
-			librpipTransactionMsgVarAdd(t, LIBRPIP_TX_MSG_TX, 'b');
-			librpipTransactionMsgVarAdd(t, LIBRPIP_TX_MSG_RX, 'c');
-
-			strcpy(outbufchar,"This is transaction a.");
-			librpipTransactionMsgVarSet(t, 'a', &outbufchar[0], strlen(outbufchar));
-			strcpy(outbufchar,"This is transaction b.");
-			librpipTransactionMsgVarSet(t, 'b', &outbufchar[0], strlen(outbufchar));
-			librpipTransactionMsgVarSet(t, 'c', 0, sizeof(inbufchar));
-
-			
-			//do it
-			librpipTransactionSend(t, 0, 0); //send to uart0. client id is ignored
-			
-			//get the results
-			librpipTransactionRead(t, &inbufchar[0], sizeof(inbufchar)); 
-			fprintf(stdout,"In: %s\n\n",inbufchar); 
-			librpipTransactionDestroy(t);
-		}	
+			fprintf(stdout,"Testing UART0\n"); 
+			uart_ascii(0);
+			uart_binary(0);
+			uart_transaction(0);
+		}
+		if(feature_set & LIBRPIP_FEATURE_UART1) {
+			fprintf(stdout,"Testing UART1\n"); 
+			uart_ascii(1);
+			uart_binary(1);
+			uart_transaction(1);
+		}		
+		librpipTransactionDestroy(t);	
 	}
+	
 		
 	librpipClose();	
 	return 0;
@@ -125,3 +88,63 @@ void show_uart_config(uint32_t id) {
 	fprintf(stdout,"\n");  
 }
 
+void setup_transaction() {
+	//create the transaction
+	t = librpipTransactionCreate(LIBRPIP_TX_MODE_UART,8);
+	librpipTransactionMsgAdd(t, LIBRPIP_TX_MSG_TX, "This is a transaction ", 22);
+	librpipTransactionMsgVarAdd(t, LIBRPIP_TX_MSG_TX, 'u');
+	librpipTransactionMsgVarAdd(t, LIBRPIP_TX_MSG_RX, 'r');
+
+}
+
+void uart_ascii(uint32_t id) {
+	char inbufchar[50], outbufchar[50];		
+			
+	fprintf(stdout,"ASCII Mode\n"); 
+	librpipUartConfigWrite(id, LIBRPIP_UART_BAUD_115200,8, 0, 1, LIBRPIP_UART_MODE_ASCII);	
+	show_uart_config(id);
+			
+	strcpy(outbufchar,"This is a test. And this is a longer test.");
+	fprintf(stdout,"Out: %s\n",outbufchar); 
+	librpipUartWrite(id, &outbufchar[0], strlen(outbufchar));
+	librpipUartRead(id, &inbufchar[0], sizeof(inbufchar),0);  
+	fprintf(stdout,"In: %s\n\n",inbufchar); 
+}
+
+void uart_binary(uint32_t id) {	
+	uint8_t inbufint[50],outbufint[50];
+		
+	fprintf(stdout,"Binary Mode\n"); 			
+	librpipUartConfigWrite(id, LIBRPIP_UART_BAUD_115200,8, 0, 1, LIBRPIP_UART_MODE_BINARY);	
+	show_uart_config(id);			
+					
+	outbufint[0]=0xff;
+	outbufint[1]=0xbe;
+	outbufint[2]=0xaf;
+	outbufint[3]=0x00;
+		
+	fprintf(stdout,"Out: 0x%x 0x%x 0x%x 0x%x\n",outbufint[0],outbufint[1],outbufint[2],outbufint[3]); 
+	librpipUartWrite(id, &outbufint[0], 4);
+	librpipUartRead(id, &inbufint[0], 4 ,0);  
+	fprintf(stdout,"In: 0x%x 0x%x 0x%x 0x%x\n\n",inbufint[0],inbufint[1],inbufint[2],inbufint[3]); 
+}
+
+void uart_transaction(uint32_t id) {
+	char inbufchar[50], outbufchar[50];		
+
+	fprintf(stdout,"As a transaction\n"); 
+	librpipUartConfigWrite(id, LIBRPIP_UART_BAUD_115200,8, 0, 1, LIBRPIP_UART_MODE_ASCII);
+	show_uart_config(id);
+				
+	sprintf(outbufchar,"on UART%u.",id);
+	librpipTransactionMsgVarSet(t, 'u', &outbufchar[0], strlen(outbufchar));
+	librpipTransactionMsgVarSet(t, 'r', 0, sizeof(inbufchar));
+
+			
+	//do it
+	librpipTransactionSend(t, id, 0); //send to uart. client id is ignored
+			
+	//get the results
+	librpipTransactionRead(t, &inbufchar[0], sizeof(inbufchar)); 
+	fprintf(stdout,"In: %s\n\n",inbufchar); 
+}

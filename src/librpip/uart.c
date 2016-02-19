@@ -204,7 +204,7 @@ uint32_t librpipUartConfigWrite(uint32_t id, uint32_t baud, uint32_t csize, uint
 					librpip_error_data=id;
 					librpip_error_extra=parity;
 				}
-				if(stop > 0) {
+				if(stop > 1) {
 					librpip_error_code=0x624;
 					librpip_error_data=id;
 					librpip_error_extra=stop;
