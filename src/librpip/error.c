@@ -337,7 +337,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			snprintf(desc, len, "[librpip WARNING] Ignoring request to transmit a transaction that has unset variable segments.\n");
 			break;
 		case 0x530:
-			snprintf(desc, len, "[librpip WARNING] Ignoring request read from a transaction that has not been initialised.\n");
+			snprintf(desc, len, "[librpip WARNING] Ignoring request to read from a transaction that has not been initialised.\n");
 			break;
 		case 0x531:
 			snprintf(desc, len, "[librpip WARNING] No data to return. Could not find another message segment to read from in the transaction.\n");
@@ -346,7 +346,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			snprintf(desc, len, "[librpip WARNING] No data to return. Could not find a message segment to read from in the transaction.\n");
 			break;
 		case 0x533:
-			snprintf(desc, len, "[librpip WARNING] Ignoring request read from a transaction that has not been sent. Status is %u\n", librpip_error_data);
+			snprintf(desc, len, "[librpip WARNING] Ignoring request to read from a transaction that has not been sent. Status is %u\n", librpip_error_data);
 			break;
 		case 0x540:
 			snprintf(desc, len, "[librpip WARNING] Ignoring request to destroy transaction. It has not been initialised.\n");
