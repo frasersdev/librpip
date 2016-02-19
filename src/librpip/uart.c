@@ -92,14 +92,14 @@ uint32_t librpip_uart_init(uint32_t id) {
 						librpip_feature_set |= LIBRPIP_FEATURE_UART1;  
 					} else {
 						//device exists but we cant RW it
-						librpip_error_code=0x601;					
+						librpip_error_code=0x607;					
 						librpip_error_data=id;
 					}	
 				}
 			} else {
 				//device does not exist
 				librpip_uart_dev_loaded[id]=0;
-				librpip_error_code=0x600;						
+				librpip_error_code=0x606;						
 				librpip_error_data=id;
 			}
 			break;

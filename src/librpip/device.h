@@ -26,7 +26,7 @@
 //dev files
 #define LIBRPIP_DEV_GPIO 		"/dev/gpiomem"
 #define LIBRPIP_DEV_UART0		"/dev/ttyAMA0"	
-#define LIBRPIP_DEV_UART1		"/dev/ttyAMA1"		
+#define LIBRPIP_DEV_UART1		"/dev/ttyS0"		
 #define LIBRPIP_DEV_I2C0 		"/dev/i2c-0"
 #define LIBRPIP_DEV_I2C1 		"/dev/i2c-1"
 #define LIBRPIP_DEV_SPI0_CS0		"/dev/spidev0.0"
