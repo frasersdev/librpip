@@ -1,5 +1,5 @@
 DIRS = src/librpip src/pwmclk
-EDIRS = src/examples/basic  src/examples/i2c-lcd src/examples/i2c-th02 src/examples/i2c-mpu6500 src/examples/pwm src/examples/spi-mcp300x src/examples/spi-mcp320x  src/examples/uart
+EDIRS = src/examples/basic  src/examples/i2c-lcd src/examples/i2c-th02 src/examples/i2c-mpu6500 src/examples/pwm src/examples/spi-mcp3002 src/examples/spi-mcp3202  src/examples/uart
 
 INSTALL	= /usr/local
 

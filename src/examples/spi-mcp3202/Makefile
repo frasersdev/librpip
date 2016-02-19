@@ -1,9 +1,9 @@
 # $Id: Makefile,v 1.8 2004/12/04 00:30:34 bsd Exp $
 
-TARGET = spi-mcp320x
+TARGET = spi-mcp3202
 
-SRCS = spi-mcp320x.c
-OBJS = spi-mcp320x.o
+SRCS = spi-mcp3202.c
+OBJS = spi-mcp3202.o
 
 
 OPTIMIZE = -O3
@@ -40,4 +40,4 @@ depend :
 	
 
 # DO NOT DELETE (Dependencies follow)
-spi-mcp320x.o: spi-mcp320x.c
+
