@@ -215,7 +215,7 @@ uint32_t librpip_spi_validate_spixcsx(uint32_t id, uint32_t cs, int* fd) {
 
 			break;
 		case 1:
-			if(librpip_feature_set & LIBRPIP_FEATURE_SPI0) {
+			if(librpip_feature_set & LIBRPIP_FEATURE_SPI1) {
 				if(cs < 3) {
 					*fd=librpip_spi_cs_dev[1][cs];
 				} else {
