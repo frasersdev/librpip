@@ -31,6 +31,7 @@
 
 #include "rpi.h"
 #include "device.h"
+#include "dt.h"
 #include "error.h"
 #include "pins.h"
 #include "i2c.h"
@@ -57,74 +58,86 @@ uint32_t librpip_i2c_init(uint32_t id) {
 	
 	switch(id) {
 		case 0:
-			if(librpip_device_node_exists(LIBRPIP_DEV_I2C0_ID)) {
-				librpip_pins_used |= LIBRPIP_PINS_I2C0;   //pins are in use
-				if(librpip_flags & LIBRPIP_FLAG_SKIP_I2C0) { //we have been asked not not use I2C0
-					librpip_error_code=0x304;					
-					librpip_error_data=id;
-				} else {
-					if(librpip_device_node_open(LIBRPIP_DEV_I2C0_ID, O_RDWR, &librpip_i2c_dev[0])) {
-						//finally check the i2c hardware supports the functions we need
-						if(librpip_i2c_config_get_funcs(&librpip_i2c_dev[0], &librpip_i2c_functions[0])) {
-							if(librpip_i2c_functions[0] & I2C_FUNC_I2C ) {
-								//device exists and we can RW it and use it
-								librpip_feature_set |= LIBRPIP_FEATURE_I2C0;  
+			if(librpip_dt_module_enabled(LIBRPIP_DT_MODULE_I2C0_ID)) {
+				if(librpip_device_node_exists(LIBRPIP_DEV_I2C0_ID)) {
+					librpip_pins_used |= librpip_pins_getpins(LIBRPIP_FEATURE_I2C0);   //pins are in use
+					if(librpip_flags & LIBRPIP_FLAG_SKIP_I2C0) { //we have been asked not not use I2C0
+						librpip_error_code=0x304;					
+						librpip_error_data=id;
+					} else {
+						if(librpip_device_node_open(LIBRPIP_DEV_I2C0_ID, O_RDWR, &librpip_i2c_dev[0])) {
+							//finally check the i2c hardware supports the functions we need
+							if(librpip_i2c_config_get_funcs(&librpip_i2c_dev[0], &librpip_i2c_functions[0])) {
+								if(librpip_i2c_functions[0] & I2C_FUNC_I2C ) {
+									//device exists and we can RW it and use it
+									librpip_feature_set |= LIBRPIP_FEATURE_I2C0;  
+								} else {
+									//device exists and we can RW it but it doesn't support I2C functions we need
+									librpip_error_code=0x311;					
+									librpip_error_data=id;
+								}
 							} else {
-								//device exists and we can RW it but it doesn't support I2C functions we need
-								librpip_error_code=0x311;					
-								librpip_error_data=id;
+								//device exists and we can RW it but we couldn't discover what it supports so we have to ignore it
+								//code got set in function
+								librpip_error_data=0;
 							}
 						} else {
-							//device exists and we can RW it but we couldn't discover what it supports so we have to ignore it
-							//code got set in function
-							librpip_error_data=0;
-						}
-					} else {
-						//device exists but we cant RW it
-						librpip_error_code=0x301;					
-						librpip_error_data=id;
-					}	
+							//device exists but we cant RW it
+							librpip_error_code=0x301;					
+							librpip_error_data=id;
+						}	
+					}
+				} else {
+					//device node does not exist
+					librpip_error_code=0x300;						
+					librpip_error_data=id;
 				}
 			} else {
-				//device does not exist
-				librpip_error_code=0x300;						
-				librpip_error_data=id;
+				//module not enabled
+				librpip_error_code=0x305;						
+				librpip_error_data=id;			
 			}
 			break;
 		case 1:
-			if(librpip_device_node_exists(LIBRPIP_DEV_I2C1_ID)) {
-				librpip_pins_used |= LIBRPIP_PINS_I2C1;   //pins are in use
-				if(librpip_flags & LIBRPIP_FLAG_SKIP_I2C1) { //we have been asked not not use I2C1
-					librpip_error_code=0x304;					
-					librpip_error_data=id;
-				} else {
-					if(librpip_device_node_open(LIBRPIP_DEV_I2C1_ID, O_RDWR, &librpip_i2c_dev[1])) {
-						//finally check the i2c hardware supports the functions we need
-						if(librpip_i2c_config_get_funcs(&librpip_i2c_dev[1], &librpip_i2c_functions[1])) {
-							if(librpip_i2c_functions[1] & I2C_FUNC_I2C) {
-								//device exists and we can RW it and use it
-								librpip_feature_set |= LIBRPIP_FEATURE_I2C1;  
+			if(librpip_dt_module_enabled(LIBRPIP_DT_MODULE_I2C1_ID)) {		
+				if(librpip_device_node_exists(LIBRPIP_DEV_I2C1_ID)) {
+					librpip_pins_used |= librpip_pins_getpins(LIBRPIP_FEATURE_I2C1);   //pins are in use
+					if(librpip_flags & LIBRPIP_FLAG_SKIP_I2C1) { //we have been asked not not use I2C1
+						librpip_error_code=0x304;					
+						librpip_error_data=id;
+					} else {
+						if(librpip_device_node_open(LIBRPIP_DEV_I2C1_ID, O_RDWR, &librpip_i2c_dev[1])) {
+							//finally check the i2c hardware supports the functions we need
+							if(librpip_i2c_config_get_funcs(&librpip_i2c_dev[1], &librpip_i2c_functions[1])) {
+								if(librpip_i2c_functions[1] & I2C_FUNC_I2C) {
+									//device exists and we can RW it and use it
+									librpip_feature_set |= LIBRPIP_FEATURE_I2C1;  
+								} else {
+									//device exists and we can RW it but it doesn't support I2C functions we need
+									librpip_error_code=0x311;					
+									librpip_error_data=id;
+								}
 							} else {
-								//device exists and we can RW it but it doesn't support I2C functions we need
-								librpip_error_code=0x311;					
-								librpip_error_data=id;
+								//device exists and we can RW it but we couldn't discover what it supports so we have to ignore it
+								//code got set in function
+								librpip_error_data=1;
 							}
 						} else {
-							//device exists and we can RW it but we couldn't discover what it supports so we have to ignore it
-							//code got set in function
-							librpip_error_data=1;
+							//device exists but we cant RW it
+							librpip_error_code=0x301;					
+							librpip_error_data=id;
 						}
-					} else {
-						//device exists but we cant RW it
-						librpip_error_code=0x301;					
-						librpip_error_data=id;
 					}
+				} else {
+					//device node does not exist
+					librpip_error_code=0x300;						
+					librpip_error_data=id;
 				}
 			} else {
-				//device does not exist, pins are not is use
-				librpip_error_code=0x300;						
-				librpip_error_data=id;
-			}
+				//module not enabled
+				librpip_error_code=0x305;						
+				librpip_error_data=id;			
+			}			
 			break;
 		default:
 			librpip_error_code=0x302;

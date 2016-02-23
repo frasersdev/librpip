@@ -167,7 +167,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 
 //I2C			
 		case 0x300:
-			snprintf(desc, len, "[librpip INFO   ] No I2C%u functions available. /dev/i2c-%u does not exist (kernel module not loaded?). Pins are available to GPIO\n", librpip_error_data, librpip_error_data);
+			snprintf(desc, len, "[librpip WARNING] No I2C%u functions available. /dev/i2c-%u does not exist (i2c-dev not loaded?). Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
 			break;	
 		case 0x301:
 			snprintf(desc, len, "[librpip ERROR  ] No I2C%u functions available. Unable to open /dev/i2c-%u for writing (user permissions?). Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
@@ -181,6 +181,9 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 		case 0x304:
 			snprintf(desc, len, "[librpip INFO   ] No I2C%u functions available. Skipping initialisation as instructed. Pins NOT available to GPIO\n", librpip_error_data);
 			break;	
+		case 0x305:
+			snprintf(desc, len, "[librpip INFO   ] No I2C%u functions available. I2C%u module is not enabled. Consult /boot/config.txt. Pins are available to GPIO\n", librpip_error_data , librpip_error_data);
+			break;			
 		case 0x311:
 			snprintf(desc, len, "[librpip ERROR  ] No I2C%u functions available. Device /dev/i2c-%u does not support I2C Functions. Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
 			break;	
@@ -218,7 +221,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			
 //PWM			
 		case 0x400:
-			snprintf(desc, len, "[librpip INFO   ] No PWM%u functions available. /sys/class/pwm/pwmchip0/pwm%u/* does not exist (PWM init script not run?). Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
+			snprintf(desc, len, "[librpip WARNING] No PWM%u functions available. /sys/class/pwm/pwmchip0/pwm%u/* does not exist (PWM init script not run?). Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
 			break;	
 		case 0x401:
 			snprintf(desc, len, "[librpip ERROR  ] No PWM%u functions available. Unable to open /sys/class/pwm/pwmchip0/pwm%u/* for writing (user permissions?). Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
@@ -242,7 +245,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			snprintf(desc, len, "[librpip INFO   ] No PWM%u functions available. Skipping initialisation as instructed. Pins NOT available to GPIO\n", librpip_error_data);
 			break;
 		case 0x408:
-			snprintf(desc, len, "[librpip INFO   ] No PWM%u functions available. PWM module is not running. Pins are available to GPIO\n", librpip_error_data);
+			snprintf(desc, len, "[librpip INFO   ] No PWM%u functions available. PWM module is not enabled. Consult /boot/config.txt. Pins are available to GPIO\n", librpip_error_data);
 			break;
 		case 0x410:
 			snprintf(desc, len, "[librpip ERROR  ] Error reading config for PWM%u. Opening file /sys/class/pwm/pwmchip0/pwm%u/duty_cycle caused errno 0x%x (%s).\n", librpip_error_data, librpip_error_data, librpip_error_extra, strerror(librpip_error_extra));
@@ -354,7 +357,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 
 //Uarts			
 		case 0x600:
-			snprintf(desc, len, "[librpip INFO   ] No UART%u functions available. /dev/ttyAMA0 does not exist (kernel module not loaded?).\n", librpip_error_data);
+			snprintf(desc, len, "[librpip WARNING] No UART%u functions available. /dev/ttyAMA0 does not exist.\n", librpip_error_data);
 			break;	
 		case 0x601:
 			snprintf(desc, len, "[librpip WARNING] No UART%u functions available. Unable to open /dev/ttyAMA0 for writing (user permissions or in use by console?). Pins NOT available to GPIO\n", librpip_error_data);
@@ -372,11 +375,14 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			snprintf(desc, len, "[librpip WARNING] Ignoring request. No UART%u functions available as it was not initialised.\n", librpip_error_data);
 			break;
 		case 0x606:
-			snprintf(desc, len, "[librpip INFO   ] No UART%u functions available. /dev/ttyS0 does not exist (kernel module not loaded?).\n", librpip_error_data);
+			snprintf(desc, len, "[librpip WARNING] No UART%u functions available. /dev/ttyS0 does not exist.\n", librpip_error_data);
 			break;	
 		case 0x607:
 			snprintf(desc, len, "[librpip WARNING] No UART%u functions available. Unable to open /dev/ttyS0 for writing (user permissions or in use by console?). Pins NOT available to GPIO\n", librpip_error_data);
-			break;				
+			break;
+		case 0x608:
+			snprintf(desc, len, "[librpip INFO   ] No UART%u functions available. UART%u module is not enabled. Consult /boot/config.txt.\n", librpip_error_data, librpip_error_data);
+			break;							
 		case 0x610:
 			snprintf(desc, len, "[librpip ERROR  ] Unable to read configuration of UART%u. The Error was 0x%x (%s).\n", librpip_error_data, librpip_error_extra, strerror(librpip_error_extra));
 			break;

@@ -35,12 +35,12 @@
 #define LIBRPIP_DEV_SPI1_CS1		"/dev/spidev1.1"
 #define LIBRPIP_DEV_SPI1_CS2		"/dev/spidev1.2"
 
+
 // the PWM kernel module does not create a device file for userspace access. :(
 // however we can use what we find in /sys so long as it has been configured for use.
 // see the pwm-init script for details.
 // yes, its a bit hacky.
 // one day perhaps we'll see a /dev file that we can send ioctl's to.
-// yuk
 
 
 //ID's

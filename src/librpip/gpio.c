@@ -39,8 +39,6 @@ extern uint32_t librpip_error_extra;
 extern uint32_t librpip_board;
 extern uint32_t librpip_flags;
 extern uint32_t librpip_pins_used;
-extern uint32_t librpip_pwm_dodisco[2];  //yuk
-extern uint32_t librpip_pwm_pin[2];		//yuk
 
 uint32_t librpip_gpio_valid_pins=0;
 static volatile uint32_t  *gpio_map = MAP_FAILED;
@@ -304,13 +302,9 @@ uint32_t librpipGpioPinEventWait(uint32_t pin, uint32_t timeout) {
 uint32_t librpip_gpio_set_valid_pins(void) {
 
 	//first off do some discovery
-	//yuk
-	if(librpip_pwm_dodisco[0]) {
-		if(librpip_pwm_discover_pin_usage(0)) librpip_pins_used |= librpip_pwm_pin[0];
-	}
-	if(librpip_pwm_dodisco[1]) {
-		if(librpip_pwm_discover_pin_usage(1)) librpip_pins_used |= librpip_pwm_pin[1];
-	}
+	//librpip_pins_used |= librpip_pwm_pin[0];
+	//librpip_pins_used |= librpip_pwm_pin[1];
+
 
 	librpip_gpio_valid_pins=librpip_board_get_pins();
 	if(librpip_gpio_valid_pins==0) {

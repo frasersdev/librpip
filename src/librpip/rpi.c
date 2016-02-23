@@ -29,6 +29,7 @@
 #include "pins.h"
 #include "device.h"
 #include "sysfs.h"
+#include "dt.h"
 #include "error.h"
 #include "gpio.h"
 #include "pwm.h"
@@ -97,6 +98,7 @@ uint32_t librpipInit(uint32_t board, uint32_t flags, uint32_t ignore_pins) {
 		}
 	}	
 	
+
 	if(librpip_board_capabilities & LIBRPIP_FEATURE_PWM0) {
 		if(!librpip_pwm_init(0)) {
 			if(librpip_flags & LIBRPIP_FLAG_DEBUG_ON) librpipErrorPrint();
@@ -108,6 +110,7 @@ uint32_t librpipInit(uint32_t board, uint32_t flags, uint32_t ignore_pins) {
 			if(librpip_flags & LIBRPIP_FLAG_DEBUG_ON) librpipErrorPrint();
 		}
 	}
+
 	
 	if(librpip_board_capabilities & LIBRPIP_FEATURE_I2C0) {
 		if(!librpip_i2c_init(0)) {
