@@ -34,5 +34,6 @@
 
 uint32_t librpip_pins_getpins(uint32_t fid);
 uint32_t librpip_pins_getpins_from_dt(uint32_t fid);
+uint32_t librpip_pins_getextpins_from_dt(uint32_t fileid);
 
 #endif

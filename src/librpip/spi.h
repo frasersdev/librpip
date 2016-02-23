@@ -65,6 +65,9 @@ uint32_t librpip_spi_init(uint32_t id);
 uint32_t librpip_spi_close(uint32_t id);
 uint32_t librpip_spi_validate_spixcsx(uint32_t id, uint32_t cs, int* fd);
 uint32_t librpip_spi_validate_spixcsx_3wire(uint32_t id, uint32_t cs, int* fd);
+uint32_t librpip_spi_validate_device_nodes_exist(uint32_t id);
+uint32_t librpip_spi_validate_device_nodes_writeable(uint32_t id);
+
 uint32_t librpip_spi_validate_flags(uint32_t spi_flags);
 void librpip_spi_struct_init(struct spi_ioc_transfer* tr);
 

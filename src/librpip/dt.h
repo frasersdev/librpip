@@ -37,6 +37,7 @@
 #define LIBRPIP_DT_MODULE_SPI1_SPIDEV2		"/sys/firmware/devicetree/base/soc/spi@7e215080/spidev@2"
 #define LIBRPIP_DT_MODULE_UART0			"/sys/firmware/devicetree/base/soc/uart@7e201000"
 #define LIBRPIP_DT_MODULE_UART1			"/sys/firmware/devicetree/base/soc/uart@7e215040"
+#define LIBRPIP_DT_MODULE_1WIRE			"/sys/firmware/devicetree/base/onewire@0"
 
 #define LIBRPIP_DT_MODULE_GPIOMEM_ID		1
 #define LIBRPIP_DT_MODULE_GPIO_ID		2
@@ -53,7 +54,7 @@
 #define LIBRPIP_DT_MODULE_SPI1_SPIDEV2_ID	13	
 #define LIBRPIP_DT_MODULE_UART0_ID		14
 #define LIBRPIP_DT_MODULE_UART1_ID		15
-
+#define LIBRPIP_DT_MODULE_1WIRE_ID		16
 
 //component files
 #define LIBRPIP_DT_FILE_STATUS			"status"
@@ -65,6 +66,7 @@
 #define LIBRPIP_DT_FILE_SPI0_PINS		"spi0_pins/brcm,pins"
 #define LIBRPIP_DT_FILE_SPI1_CSPINS 		"spi1_cs_pins/brcm,pins"
 #define LIBRPIP_DT_FILE_SPI1_PINS 		"spi1_pins/brcm,pins"
+#define LIBRPIP_DT_FILE_1WIRE_PINS 		"w1_pins/brcm,pins"
 
 #define LIBRPIP_DT_FILE_STATUS_ID		1
 #define LIBRPIP_DT_FILE_I2C0_PINS_ID		2
@@ -75,6 +77,7 @@
 #define LIBRPIP_DT_FILE_SPI0_PINS_ID		7
 #define LIBRPIP_DT_FILE_SPI1_CSPINS_ID 		8
 #define LIBRPIP_DT_FILE_SPI1_PINS_ID 		9
+#define LIBRPIP_DT_FILE_1WIRE_PINS_ID		10
 
 uint32_t librpip_dt_module_enabled(uint32_t moduleid);
 uint32_t librpip_dt_module_exists(uint32_t moduleid);

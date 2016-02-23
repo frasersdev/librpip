@@ -36,8 +36,8 @@ uint32_t librpip_dt_module_enabled(uint32_t moduleid) {
 	char status[10];
 
 	if(librpip_dt_module_exists(moduleid)) {
-		if(librpip_dt_file_get_str(moduleid, LIBRPIP_DT_FILE_STATUS_ID, &status[0], 10)) {		
-			if(strcmp((const char *)&status[0],"disabled")) {
+		if(librpip_dt_file_get_str(moduleid, LIBRPIP_DT_FILE_STATUS_ID, &status[0], 10)) {				
+			if(strcmp((const char *)&status[0],"disabled")) {			
 				return 1;
 			}
 		}
@@ -95,6 +95,10 @@ uint32_t librpip_dt_module_exists(uint32_t moduleid) {
 			break;			
 		case LIBRPIP_DT_MODULE_UART1_ID:
 			result=stat(LIBRPIP_DT_MODULE_UART1,&fileStat);
+			break;
+		case LIBRPIP_DT_MODULE_1WIRE_ID:
+			result=stat(LIBRPIP_DT_MODULE_1WIRE,&fileStat);
+			break;
 		default:
 			result=-1;
 	}
@@ -154,6 +158,9 @@ uint32_t librpip_dt_file_open(uint32_t moduleid, uint32_t fileid, int flags, int
 		case LIBRPIP_DT_MODULE_UART1_ID:
 			node=LIBRPIP_DT_MODULE_UART1;	
 			break;
+		case LIBRPIP_DT_MODULE_1WIRE_ID:
+			node=LIBRPIP_DT_MODULE_1WIRE;	
+			break;			
 	}
 	
 	switch(fileid) {
@@ -183,7 +190,10 @@ uint32_t librpip_dt_file_open(uint32_t moduleid, uint32_t fileid, int flags, int
 			break;			
 		case LIBRPIP_DT_FILE_SPI1_PINS_ID:
 			file=LIBRPIP_DT_FILE_SPI1_PINS;
-			break;				
+			break;	
+		case LIBRPIP_DT_FILE_1WIRE_PINS_ID:
+			file=LIBRPIP_DT_FILE_1WIRE_PINS;
+			break;						
 	}	
 	
 	if(node && file) {

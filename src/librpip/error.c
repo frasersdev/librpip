@@ -102,7 +102,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			
 // SPI			
 		case 0x200:
-			snprintf(desc, len, "[librpip INFO   ] No SPI%u functions available. /dev/spidev%u.x does not exist (kernel module not loaded?). Pins are available to GPIO\n", librpip_error_data, librpip_error_data);
+			snprintf(desc, len, "[librpip WARNING] No SPI%u functions available. /dev/spidev%u.x does not exist (spidev blaclisted?). Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
 			break;	
 		case 0x201:
 			snprintf(desc, len, "[librpip ERROR  ] No SPI%u functions available. Unable to open /dev/spidev%u.x for writing (user permissions?). Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
@@ -121,7 +121,10 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			break;		
 		case 0x206:
 			snprintf(desc, len, "[librpip WARNING] Ignoring request. 3Wire mode is not supported on SPI%u.\n", librpip_error_data);
-			break;			
+			break;	
+		case 0x207:
+			snprintf(desc, len, "[librpip INFO   ] No SPI%u functions available. SPI%u module is not enabled. Consult /boot/overlays/README. Pins are available to GPIO\n", librpip_error_data , librpip_error_data);
+			break;						
 		case 0x210:
 			snprintf(desc, len, "[librpip ERROR  ] Unable to read SPI%u Mode (SPI_IOC_RD_MODE). Error 0x%x (%s)\n", librpip_error_data, librpip_error_extra, strerror(librpip_error_extra) );
 			break;				
@@ -182,7 +185,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			snprintf(desc, len, "[librpip INFO   ] No I2C%u functions available. Skipping initialisation as instructed. Pins NOT available to GPIO\n", librpip_error_data);
 			break;	
 		case 0x305:
-			snprintf(desc, len, "[librpip INFO   ] No I2C%u functions available. I2C%u module is not enabled. Consult /boot/config.txt. Pins are available to GPIO\n", librpip_error_data , librpip_error_data);
+			snprintf(desc, len, "[librpip INFO   ] No I2C%u functions available. I2C%u module is not enabled. Consult /boot/overlays/README. Pins are available to GPIO\n", librpip_error_data , librpip_error_data);
 			break;			
 		case 0x311:
 			snprintf(desc, len, "[librpip ERROR  ] No I2C%u functions available. Device /dev/i2c-%u does not support I2C Functions. Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
@@ -245,7 +248,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			snprintf(desc, len, "[librpip INFO   ] No PWM%u functions available. Skipping initialisation as instructed. Pins NOT available to GPIO\n", librpip_error_data);
 			break;
 		case 0x408:
-			snprintf(desc, len, "[librpip INFO   ] No PWM%u functions available. PWM module is not enabled. Consult /boot/config.txt. Pins are available to GPIO\n", librpip_error_data);
+			snprintf(desc, len, "[librpip INFO   ] No PWM%u functions available. PWM module is not enabled. Consult /boot/overlays/README. Pins are available to GPIO\n", librpip_error_data);
 			break;
 		case 0x410:
 			snprintf(desc, len, "[librpip ERROR  ] Error reading config for PWM%u. Opening file /sys/class/pwm/pwmchip0/pwm%u/duty_cycle caused errno 0x%x (%s).\n", librpip_error_data, librpip_error_data, librpip_error_extra, strerror(librpip_error_extra));
@@ -381,7 +384,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			snprintf(desc, len, "[librpip WARNING] No UART%u functions available. Unable to open /dev/ttyS0 for writing (user permissions or in use by console?). Pins NOT available to GPIO\n", librpip_error_data);
 			break;
 		case 0x608:
-			snprintf(desc, len, "[librpip INFO   ] No UART%u functions available. UART%u module is not enabled. Consult /boot/config.txt.\n", librpip_error_data, librpip_error_data);
+			snprintf(desc, len, "[librpip INFO   ] No UART%u functions available. UART%u module is not enabled. Consult /boot/overlays/README.\n", librpip_error_data, librpip_error_data);
 			break;							
 		case 0x610:
 			snprintf(desc, len, "[librpip ERROR  ] Unable to read configuration of UART%u. The Error was 0x%x (%s).\n", librpip_error_data, librpip_error_extra, strerror(librpip_error_extra));
