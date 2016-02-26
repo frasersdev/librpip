@@ -1,3 +1,11 @@
+0.3.0
+Released  26/2/2016
+
+* SPI1 support
+* Detection of allocation GPIO pins via device tree 
+* Better MCP3202 and MCP3002 examples 
+
+
 0.2.1
 Released  19/2/2016
 
