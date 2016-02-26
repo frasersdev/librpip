@@ -31,6 +31,7 @@
 #include "gpio.h"
 #include "error.h"
 #include "sysfs.h"
+#include "dt.h"
 #include "board.h"
 #include "pins.h"
 #include "pwm.h"
@@ -46,7 +47,6 @@ extern uint32_t librpip_flags;
 extern uint32_t librpip_pins_used;
 
 uint32_t librpip_pwm_pin[2];
-uint32_t librpip_pwm_dodisco[2];
 uint32_t librpip_servo_config[2][3];
 
 /* exposed functions */
@@ -54,11 +54,12 @@ uint32_t librpip_pwm_init(uint32_t id) {
 
 	librpip_error_code=0;
 	librpip_error_data=0;
-	
-	if(librpip_sysfs_node_exists(LIBRPIP_SYSFS_PWM_MODULE_ID)) {
+
+	if(librpip_dt_module_enabled(LIBRPIP_DT_MODULE_PWM_ID)) {
 		switch(id) {
 			case 0:
-				librpip_pwm_dodisco[0]=1; //we have to wait for GPIO to initialise before we can do discovery //yuk
+				librpip_pwm_pin[0]=librpip_pins_getpins(LIBRPIP_FEATURE_PWM0);
+				librpip_pins_used |= librpip_pwm_pin[0];
 				if(librpip_sysfs_node_exists(LIBRPIP_SYSFS_PWM0_ID)) {
 					if(librpip_flags & LIBRPIP_FLAG_SKIP_PWM0) { //we have been asked not not use PWM0
 						librpip_error_code=0x407;					
@@ -77,7 +78,8 @@ uint32_t librpip_pwm_init(uint32_t id) {
 				}
 				break;
 			case 1:
-				librpip_pwm_dodisco[1]=1; //we have to wait for GPIO to initialise before we can do discovery //yuk
+				librpip_pwm_pin[1]=librpip_pins_getpins(LIBRPIP_FEATURE_PWM1);
+				librpip_pins_used |= librpip_pwm_pin[1];
 				if(librpip_sysfs_node_exists(LIBRPIP_SYSFS_PWM1_ID)) {
 					if(librpip_flags & LIBRPIP_FLAG_SKIP_PWM1) { //we have been asked not not use PWM1
 						librpip_error_code=0x407;					
@@ -101,16 +103,14 @@ uint32_t librpip_pwm_init(uint32_t id) {
 				break;
 		}
 	} else {
-		librpip_pwm_dodisco[0]=0; 	//setting all pwms to no discovery
-		librpip_pwm_dodisco[1]=0; 
 		librpip_error_code=0x408;	//module is not running, pins are not in use
 		librpip_error_data=id;
 	}
 
 	if(!librpip_error_code) {
 		if(!(librpip_flags & LIBRPIP_FLAG_NO_RESET)) {
-			librpip_pwm_status_set(id, LIBRPIP_PWM_STATUS_OFF);	//disabled
-			librpip_pwm_dutycycle_set(id, 0);					//no pulse
+			librpip_pwm_status_set(id, LIBRPIP_PWM_STATUS_OFF);		//disabled
+			librpip_pwm_dutycycle_set(id, 0);				//no pulse
 			librpip_pwm_period_set(id, 20000);   				//20ms
 			librpip_pwm_flags_set(id, LIBRPIP_PWM_FLAG_POLARITY_NORMAL);
 		}
@@ -477,61 +477,6 @@ uint32_t librpip_pwm_validate_id(uint32_t id) {
 	return librpip_error_code ? 0 : 1;
 }
 
-uint32_t librpip_pwm_discover_pin_usage(uint32_t id) {
-
-	uint32_t possible_pins, pin_mode;
-	uint8_t i;
-	
-	possible_pins=librpip_board_get_pins();
-	librpip_pwm_pin[id]=0;
-	
-	if(possible_pins==0) {
-		librpip_error_code=0x403;
-	} else {
-		switch(id) {
-			case 0:
-				possible_pins &= LIBRPIP_PINS_PWM0;	
-				break;
-			case 1:
-				possible_pins &= LIBRPIP_PINS_PWM1;	
-				break;
-			default:
-				possible_pins =0;
-				librpip_error_code=0x404;
-				librpip_error_data=id;
-		}
-	}
-
-	if(possible_pins) {
-		for(i=0;i<32;i++) {
-			if(possible_pins & (1 << i)) {
-				pin_mode=librpip_gpio_pin_mode_get(i);
-				switch(i) {
-					case 12:
-					case 13:
-						if(pin_mode==LIBRPIP_GPIO_FNC_ALT0) {
-							librpip_pwm_pin[id]=1<<i;
-						}
-						break;
-					case 18:
-					case 19:
-						if(pin_mode==LIBRPIP_GPIO_FNC_ALT5) {
-							librpip_pwm_pin[id]=1<<i;
-						}
-						break;
-				}
-			}
-		}
-		if(!librpip_pwm_pin[id]) {
-			librpip_error_code=0x405;
-			librpip_error_data=id;
-		}
-	
-	} 
-
-	return librpip_error_code  ? 0 : 1;
-	
-}
 uint32_t librpip_pwm_get_sysfs_id(uint32_t id) {
 	switch(id) {
 		case 0:

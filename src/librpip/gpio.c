@@ -28,6 +28,8 @@
 #include "rpi.h"
 #include "board.h"
 #include "device.h"
+#include "dt.h"
+#include "pins.h"
 #include "error.h"
 #include "pwm.h"
 #include "gpio.h"
@@ -39,8 +41,6 @@ extern uint32_t librpip_error_extra;
 extern uint32_t librpip_board;
 extern uint32_t librpip_flags;
 extern uint32_t librpip_pins_used;
-extern uint32_t librpip_pwm_dodisco[2];  //yuk
-extern uint32_t librpip_pwm_pin[2];		//yuk
 
 uint32_t librpip_gpio_valid_pins=0;
 static volatile uint32_t  *gpio_map = MAP_FAILED;
@@ -303,14 +303,11 @@ uint32_t librpipGpioPinEventWait(uint32_t pin, uint32_t timeout) {
 /* internal functions */
 uint32_t librpip_gpio_set_valid_pins(void) {
 
-	//first off do some discovery
-	//yuk
-	if(librpip_pwm_dodisco[0]) {
-		if(librpip_pwm_discover_pin_usage(0)) librpip_pins_used |= librpip_pwm_pin[0];
-	}
-	if(librpip_pwm_dodisco[1]) {
-		if(librpip_pwm_discover_pin_usage(1)) librpip_pins_used |= librpip_pwm_pin[1];
-	}
+	//first check for some other modules that might be running and using gpios
+	if(librpip_dt_module_enabled(LIBRPIP_DT_MODULE_I2S_ID)) 
+		librpip_pins_used |= librpip_pins_getextpins_from_dt(LIBRPIP_DT_FILE_I2S_PINS_ID);
+	if(librpip_dt_module_enabled(LIBRPIP_DT_MODULE_1WIRE_ID)) 
+		librpip_pins_used |= librpip_pins_getextpins_from_dt(LIBRPIP_DT_FILE_1WIRE_PINS_ID);
 
 	librpip_gpio_valid_pins=librpip_board_get_pins();
 	if(librpip_gpio_valid_pins==0) {

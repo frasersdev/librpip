@@ -58,7 +58,6 @@ uint32_t librpipServoPositionWrite(uint32_t id, float angle);
 //private functions
 uint32_t librpip_pwm_init(uint32_t id);
 uint32_t librpip_pwm_validate_id(uint32_t id);
-uint32_t librpip_pwm_discover_pin_usage(uint32_t id);
 uint32_t librpip_pwm_get_sysfs_id(uint32_t id);
 uint32_t librpip_pwm_dutycycle_get(uint32_t id, uint32_t* duty_cycle);
 uint32_t librpip_pwm_period_get(uint32_t id, uint32_t* period);

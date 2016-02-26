@@ -36,10 +36,7 @@ uint32_t librpip_sysfs_node_exists(uint32_t sysfsid) {
 	struct stat fileStat;
 	int result;
 
-    switch(sysfsid) {
-		case LIBRPIP_SYSFS_PWM_MODULE_ID:						
-			result=stat(LIBRPIP_SYSFS_PWM_MODULE,&fileStat);
-			break;
+	switch(sysfsid) {
 		case LIBRPIP_SYSFS_PWM0_ID:						
 			result=stat(LIBRPIP_SYSFS_PWM0,&fileStat);
 			break;
@@ -109,7 +106,7 @@ uint32_t librpip_sysfs_node_file_open(uint32_t sysfsid, uint32_t fileid, int fla
 			file=LIBRPIP_SYSFS_PWM_POLARITY;
 			break;
 	}
-	if(file && node) {
+	if(node && file) {
 		sprintf(sfile,"%s/%s",node,file);
 		*fd=open(sfile, flags);
 		return *fd < 0 ? 0 : 1;  
@@ -125,7 +122,7 @@ uint32_t librpip_sysfs_node_file_get_int(uint32_t sysfsid, uint32_t fileid, int*
 	result=0;
 
 	if(librpip_sysfs_node_file_open(sysfsid, fileid, O_RDONLY, &fd)) {
-    	if(read(fd, buf, sizeof(buf))) {
+    		if(read(fd, buf, sizeof(buf))) {
 			*value=atoi(buf);
 			result=1;
 		}
@@ -140,7 +137,7 @@ uint32_t librpip_sysfs_node_file_get_str(uint32_t sysfsid, uint32_t fileid, char
 	result=0;
 
 	if(librpip_sysfs_node_file_open(sysfsid, fileid, O_RDONLY, &fd)) {
-    	if(read(fd, value, len)) {
+    		if(read(fd, value, len)) {
 			result=1;
 		}
 		close(fd);
@@ -157,7 +154,7 @@ uint32_t librpip_sysfs_node_file_set_int(uint32_t sysfsid, uint32_t fileid, int 
 	sprintf(buf,"%u",value); //an int will fit into 20 chars
 
 	if(librpip_sysfs_node_file_open(sysfsid, fileid, O_RDWR, &fd)) {
-    	if(write(fd, buf, sizeof(buf)))  {
+    		if(write(fd, buf, sizeof(buf)))  {
 			result=1;
 		}
 		close(fd);
@@ -172,7 +169,7 @@ uint32_t librpip_sysfs_node_file_set_str(uint32_t sysfsid, uint32_t fileid, char
 	result=0;
 	
 	if(librpip_sysfs_node_file_open(sysfsid, fileid, O_RDWR, &fd)) {
-    	if(write(fd, value, len))  {
+    		if(write(fd, value, len))  {
 			result=1;
 		}
 		close(fd);

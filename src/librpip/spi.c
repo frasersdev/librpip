@@ -31,6 +31,7 @@
 #include "rpi.h"
 #include "device.h"
 #include "error.h"
+#include "dt.h"
 #include "pins.h"
 #include "transact.h"
 #include "spi.h"
@@ -44,6 +45,7 @@ extern uint32_t librpip_board;
 extern uint32_t librpip_flags;
 extern uint32_t librpip_pins_used;
 
+uint32_t librpip_spi_cs[2][3];
 int 	librpip_spi_cs_dev[2][3];
 
 /* exposed functions */
@@ -53,47 +55,59 @@ uint32_t librpip_spi_init(uint32_t id) {
 	librpip_error_data=0;
 	switch(id) {
 		case 0:
-			if(librpip_device_node_exists(LIBRPIP_DEV_SPI0_CS0_ID) && 
-			   librpip_device_node_exists(LIBRPIP_DEV_SPI0_CS1_ID)) {
-			   	librpip_pins_used |= LIBRPIP_PINS_SPI0;	//pins are in use
+			librpip_spi_cs[0][0]=0;
+			librpip_spi_cs[0][1]=0;
+			librpip_spi_cs[0][2]=0;	
+			if(librpip_dt_module_enabled(LIBRPIP_DT_MODULE_SPI0_ID)) {
+				librpip_pins_used |= librpip_pins_getpins(LIBRPIP_FEATURE_SPI0);   //pins are in use					
 				if(librpip_flags & LIBRPIP_FLAG_SKIP_SPI0) { //we have been asked not not use SPI0
-					librpip_error_code=0x205;					
-					librpip_error_data=id;
+						librpip_error_code=0x205;					
+						librpip_error_data=id;
 				} else {
-					if(librpip_device_node_open(LIBRPIP_DEV_SPI0_CS0_ID, O_RDWR, &librpip_spi_cs_dev[0][0]) && 
-					   librpip_device_node_open(LIBRPIP_DEV_SPI0_CS1_ID, O_RDWR, &librpip_spi_cs_dev[0][1]) ) {
-						librpip_feature_set |= LIBRPIP_FEATURE_SPI0;  //device exists and we can RW it
+					if(librpip_spi_validate_device_nodes_exist(0)) {
+						if(librpip_spi_validate_device_nodes_writeable(0) ) {
+							librpip_feature_set |= LIBRPIP_FEATURE_SPI0;  //device exists and we can RW it
+						} else {
+							librpip_error_code=0x201; //device exists but we cant RW it
+							librpip_error_data=id;
+						}
+
 					} else {
-						librpip_error_code=0x201;					//device exists but we cant RW it
+						librpip_error_code=0x200;	//device does not exist, pins are in use
 						librpip_error_data=id;
 					}
-				}
+				} 
 			} else {
-				librpip_error_code=0x200;						//device does not exist, pins are not is use
-				librpip_error_data=id;
+				librpip_error_code=0x207;	//module not loaded
+				librpip_error_data=id;			
 			}
 			break;
 		case 1:
-			if(librpip_device_node_exists(LIBRPIP_DEV_SPI1_CS0_ID) && 
-			   librpip_device_node_exists(LIBRPIP_DEV_SPI1_CS1_ID) && 
-			   librpip_device_node_exists(LIBRPIP_DEV_SPI1_CS2_ID)) {
-			   	librpip_pins_used |= LIBRPIP_PINS_SPI1;	//pins are in use
+			librpip_spi_cs[1][0]=0;
+			librpip_spi_cs[1][1]=0;
+			librpip_spi_cs[1][2]=0;	
+			if(librpip_dt_module_enabled(LIBRPIP_DT_MODULE_SPI1_ID)) {
+				librpip_pins_used |= librpip_pins_getpins(LIBRPIP_FEATURE_SPI1);   //pins are in use					
 				if(librpip_flags & LIBRPIP_FLAG_SKIP_SPI1) { //we have been asked not not use SPI0
-					librpip_error_code=0x205;					
-					librpip_error_data=id;
+						librpip_error_code=0x205;					
+						librpip_error_data=id;
 				} else {
-					if(librpip_device_node_open(LIBRPIP_DEV_SPI1_CS0_ID, O_RDWR, &librpip_spi_cs_dev[1][0]) && 
-					   librpip_device_node_open(LIBRPIP_DEV_SPI1_CS1_ID, O_RDWR, &librpip_spi_cs_dev[1][1]) && 
-					   librpip_device_node_open(LIBRPIP_DEV_SPI1_CS2_ID, O_RDWR, &librpip_spi_cs_dev[1][2]) ) {
-						librpip_feature_set |= LIBRPIP_FEATURE_SPI1;  //device exists and we can RW it
+					if(librpip_spi_validate_device_nodes_exist(1)) {
+						if(librpip_spi_validate_device_nodes_writeable(1) ) {
+							librpip_feature_set |= LIBRPIP_FEATURE_SPI1;  //device exists and we can RW it
+						} else {
+							librpip_error_code=0x201; //device exists but we cant RW it
+							librpip_error_data=id;
+						}
+
 					} else {
-						librpip_error_code=0x201;					//device exists but we cant RW it
+						librpip_error_code=0x200;	//device does not exist, pins are in use
 						librpip_error_data=id;
 					}
-				}
+				} 
 			} else {
-				librpip_error_code=0x200;						//device does not exist, pins are not is use
-				librpip_error_data=id;
+				librpip_error_code=0x207;	//module not loaded
+				librpip_error_data=id;			
 			}
 			break;
 		default:
@@ -103,11 +117,9 @@ uint32_t librpip_spi_init(uint32_t id) {
 	}
 	if(librpip_error_code==0) {
 		if(!(librpip_flags & LIBRPIP_FLAG_NO_RESET)) {
-			librpip_spi_config_set(&librpip_spi_cs_dev[id][0], SPI_MODE_0, 0, 8, 1000000);
-			librpip_spi_config_set(&librpip_spi_cs_dev[id][1], SPI_MODE_0, 0, 8, 1000000);  //yes each cs has its own config
-			if(id==1) {
-				librpip_spi_config_set(&librpip_spi_cs_dev[id][2], SPI_MODE_0, 0, 8, 1000000);
-			}
+			if(librpip_spi_cs[id][0]) librpip_spi_config_set(&librpip_spi_cs_dev[id][0], SPI_MODE_0, 0, 8, 1000000);
+			if(librpip_spi_cs[id][1]) librpip_spi_config_set(&librpip_spi_cs_dev[id][1], SPI_MODE_0, 0, 8, 1000000);  
+			if(librpip_spi_cs[id][2]) librpip_spi_config_set(&librpip_spi_cs_dev[id][2], SPI_MODE_0, 0, 8, 1000000);
 		}
 	}
 	
@@ -121,13 +133,13 @@ uint32_t librpip_spi_close(uint32_t id) {
 	
 	switch(id) {
 		case 0:
-			close(librpip_spi_cs_dev[0][0]);
-			close(librpip_spi_cs_dev[0][1]);
+			if(librpip_spi_cs[0][0]) close(librpip_spi_cs_dev[0][0]);
+			if(librpip_spi_cs[0][1]) close(librpip_spi_cs_dev[0][1]);
 			break;
 		case 1:
-			close(librpip_spi_cs_dev[1][0]);
-			close(librpip_spi_cs_dev[1][1]);
-			close(librpip_spi_cs_dev[1][2]);
+			if(librpip_spi_cs[1][0]) close(librpip_spi_cs_dev[1][0]);
+			if(librpip_spi_cs[1][1]) close(librpip_spi_cs_dev[1][1]);
+			if(librpip_spi_cs[1][2]) close(librpip_spi_cs_dev[1][2]);
 			break;
 		default:
 			librpip_error_code=0x202;
@@ -193,16 +205,18 @@ uint32_t librpipSpiConfigWrite(uint32_t id, uint32_t cs, uint32_t mode, uint32_t
 
 
 //internal functions
-
-
-
-
 uint32_t librpip_spi_validate_spixcsx(uint32_t id, uint32_t cs, int* fd) {
 	switch(id) {
 		case 0:
 			if(librpip_feature_set & LIBRPIP_FEATURE_SPI0) {
 				if(cs < 2) {
-					*fd=librpip_spi_cs_dev[0][cs];
+					if(librpip_spi_cs[0][cs])  {
+						*fd=librpip_spi_cs_dev[0][cs];
+					} else {
+						librpip_error_code=0x208;
+						librpip_error_data=id;
+						librpip_error_extra=cs;
+					}
 				} else {
 					librpip_error_code=0x203;
 					librpip_error_data=id;
@@ -217,7 +231,13 @@ uint32_t librpip_spi_validate_spixcsx(uint32_t id, uint32_t cs, int* fd) {
 		case 1:
 			if(librpip_feature_set & LIBRPIP_FEATURE_SPI1) {
 				if(cs < 3) {
-					*fd=librpip_spi_cs_dev[1][cs];
+					if(librpip_spi_cs[1][cs])  {
+						*fd=librpip_spi_cs_dev[1][cs];
+					} else {
+						librpip_error_code=0x208;
+						librpip_error_data=id;
+						librpip_error_extra=cs;
+					}
 				} else {
 					librpip_error_code=0x203;
 					librpip_error_data=id;
@@ -251,6 +271,70 @@ uint32_t librpip_spi_validate_spixcsx_3wire(uint32_t id, uint32_t cs, int* fd) {
 	}
 	return librpip_error_code ? 0 : 1;
 }
+
+uint32_t librpip_spi_validate_device_nodes_exist(uint32_t id) {
+
+	uint32_t result;
+	
+	result=0;
+	switch(id) {
+		case 0:
+			if(librpip_spi_cs[0][0] || librpip_spi_cs[0][1]) result=1; 
+			if(librpip_spi_cs[0][0]) {
+				result &= librpip_device_node_exists(LIBRPIP_DEV_SPI0_CS0_ID);
+			}
+			if(librpip_spi_cs[0][1]) {
+				result &= librpip_device_node_exists(LIBRPIP_DEV_SPI0_CS1_ID);
+			}
+			break;	
+		case 1:
+			if(librpip_spi_cs[1][0] || librpip_spi_cs[1][1] || librpip_spi_cs[1][2]) result=1; 
+			if(librpip_spi_cs[1][0]) {
+				result &= librpip_device_node_exists(LIBRPIP_DEV_SPI1_CS0_ID);
+			}
+			if(librpip_spi_cs[1][1]) {
+				result &= librpip_device_node_exists(LIBRPIP_DEV_SPI1_CS1_ID);
+			}
+			if(librpip_spi_cs[1][2]) {
+				result &= librpip_device_node_exists(LIBRPIP_DEV_SPI1_CS2_ID);
+			}			
+			break;						
+	}
+	return result;
+}
+
+uint32_t librpip_spi_validate_device_nodes_writeable(uint32_t id) {
+
+	uint32_t result;
+	
+	result=0;
+	switch(id) {
+		case 0:
+			if(librpip_spi_cs[0][0] || librpip_spi_cs[0][1]) result=1; 
+			if(librpip_spi_cs[0][0]) {
+				result &= librpip_device_node_open(LIBRPIP_DEV_SPI0_CS0_ID, O_RDWR, &librpip_spi_cs_dev[0][0]);
+			}
+			if(librpip_spi_cs[0][1]) {
+				result &= librpip_device_node_open(LIBRPIP_DEV_SPI0_CS1_ID, O_RDWR, &librpip_spi_cs_dev[0][1]);
+			}
+			break;	
+		case 1:
+			if(librpip_spi_cs[1][0] || librpip_spi_cs[1][1] || librpip_spi_cs[1][2]) result=1; 
+			if(librpip_spi_cs[1][0]) {
+				result &= librpip_device_node_open(LIBRPIP_DEV_SPI1_CS0_ID, O_RDWR, &librpip_spi_cs_dev[1][0]);
+			}
+			if(librpip_spi_cs[1][1]) {
+				result &= librpip_device_node_open(LIBRPIP_DEV_SPI1_CS1_ID, O_RDWR, &librpip_spi_cs_dev[1][1]);
+			}
+			if(librpip_spi_cs[1][2]) {
+				result &= librpip_device_node_open(LIBRPIP_DEV_SPI1_CS2_ID, O_RDWR, &librpip_spi_cs_dev[1][2]);
+			}			
+			break;						
+	}
+	return result;
+}
+
+
 
 
 uint32_t librpip_spi_validate_flags(uint32_t spi_flags) {

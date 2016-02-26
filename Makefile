@@ -4,7 +4,7 @@ EDIRS = src/examples/basic  src/examples/i2c-lcd src/examples/i2c-th02 src/examp
 INSTALL	= /usr/local
 
 SO_VERSION = 0
-REL_VERSION = 0.2.1
+REL_VERSION = 0.3.0
 
 all :
 	@set -e; for d in $(DIRS); do $(MAKE) -C $$d -j SO_VERSION=${SO_VERSION} REL_VERSION=${REL_VERSION}; done
@@ -27,7 +27,7 @@ install :
 clean :
 	rm -f lib/librpip.a lib/librpip.so.* bin/pwmclk config.log
 	rm -Rf autom4te.cache
-	find . -type f -name *DS_Store -exec rm -f '{}' ';'
-	find . -type f -name ._* -exec rm -f '{}' ';'
+	find . -type f -name '*DS_Store' -exec rm -f '{}' ';'
+	find . -type f -name '._*' -exec rm -f '{}' ';'
 	@set -e; for d in $(DIRS); do $(MAKE) -C $$d clean ; done
 	@set -e; for d in $(EDIRS); do $(MAKE) -C $$d clean ; done

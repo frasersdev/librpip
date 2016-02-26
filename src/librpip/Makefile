@@ -2,8 +2,8 @@
 
 TARGET = librpip
 
-SRCS = board.c device.c sysfs.c error.c pwm.c i2c.c spi.c uart.c gpio.c transact.c rpi.c
-OBJS = board.o device.o sysfs.o error.o pwm.o i2c.o spi.o uart.o gpio.o transact.o rpi.o
+SRCS = board.c device.c sysfs.c dt.c pins.c error.c pwm.c i2c.c spi.c uart.c gpio.c transact.c rpi.c
+OBJS = board.o device.o sysfs.o dt.o pins.o error.o pwm.o i2c.o spi.o uart.o gpio.o transact.o rpi.o
 
 
 OPTIMIZE = -O3

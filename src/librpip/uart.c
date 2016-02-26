@@ -31,6 +31,7 @@
 
 #include "rpi.h"
 #include "device.h"
+#include "dt.h"
 #include "pins.h"
 #include "error.h"
 #include "transact.h"
@@ -57,50 +58,61 @@ uint32_t librpip_uart_init(uint32_t id) {
 	
 	switch(id) {
 		case 0:
-			
-			if(librpip_device_node_exists(LIBRPIP_DEV_UART0_ID)) {
-				librpip_uart_dev_loaded[id]=1;
-				librpip_pins_used |= LIBRPIP_PINS_UART0;   //pins are in use
-				if(librpip_flags & LIBRPIP_FLAG_SKIP_UART0) { //we have been asked not not use I2C0
-					librpip_error_code=0x603;					
-					librpip_error_data=id;
-				} else {
-					if(librpip_device_node_open(LIBRPIP_DEV_UART0_ID, O_RDWR | O_NOCTTY | O_NDELAY, &librpip_uart_dev[0])) {
-						librpip_feature_set |= LIBRPIP_FEATURE_UART0;  
-					} else {
-						//device exists but we cant RW it
-						librpip_error_code=0x601;					
+			librpip_uart_dev_loaded[id]=0;
+			if(librpip_dt_module_enabled(LIBRPIP_DT_MODULE_UART0_ID)) {
+				if(librpip_device_node_exists(LIBRPIP_DEV_UART0_ID)) {
+					librpip_uart_dev_loaded[id]=1;
+					librpip_pins_used |= librpip_pins_getpins(LIBRPIP_FEATURE_UART0);   //pins are in use
+					if(librpip_flags & LIBRPIP_FLAG_SKIP_UART0) { //we have been asked not not use I2C0
+						librpip_error_code=0x603;					
 						librpip_error_data=id;
-					}	
+					} else {
+						if(librpip_device_node_open(LIBRPIP_DEV_UART0_ID, O_RDWR | O_NOCTTY | O_NDELAY, &librpip_uart_dev[0])) {
+							librpip_feature_set |= LIBRPIP_FEATURE_UART0;  
+						} else {
+							//device exists but we cant RW it
+							librpip_error_code=0x601;					
+							librpip_error_data=id;
+						}	
+					}
+				} else {
+					//device does not exist
+					librpip_error_code=0x600;						
+					librpip_error_data=id;
 				}
 			} else {
-				//device does not exist
-				librpip_uart_dev_loaded[id]=0;
-				librpip_error_code=0x600;						
-				librpip_error_data=id;
+				//module is not active
+				librpip_error_code=0x608;						
+				librpip_error_data=id;			
 			}
 			break;
 		case 1:
-			if(librpip_device_node_exists(LIBRPIP_DEV_UART1_ID)) {
-				librpip_uart_dev_loaded[id]=1;
-				librpip_pins_used |= LIBRPIP_PINS_UART1;   //pins are in use
-				if(librpip_flags & LIBRPIP_FLAG_SKIP_UART1) { //we have been asked not not use I2C0
-					librpip_error_code=0x603;					
-					librpip_error_data=id;
-				} else {
-					if(librpip_device_node_open(LIBRPIP_DEV_UART1_ID, O_RDWR | O_NOCTTY | O_NDELAY, &librpip_uart_dev[1])) {
-						librpip_feature_set |= LIBRPIP_FEATURE_UART1;  
-					} else {
-						//device exists but we cant RW it
-						librpip_error_code=0x607;					
+			librpip_uart_dev_loaded[id]=0;
+			if(librpip_dt_module_enabled(LIBRPIP_DT_MODULE_UART1_ID)) {		
+				if(librpip_device_node_exists(LIBRPIP_DEV_UART1_ID)) {
+					librpip_uart_dev_loaded[id]=1;
+					librpip_pins_used |= librpip_pins_getpins(LIBRPIP_FEATURE_UART1);   //pins are in use
+					if(librpip_flags & LIBRPIP_FLAG_SKIP_UART1) { //we have been asked not not use I2C0
+						librpip_error_code=0x603;					
 						librpip_error_data=id;
-					}	
+					} else {
+						if(librpip_device_node_open(LIBRPIP_DEV_UART1_ID, O_RDWR | O_NOCTTY | O_NDELAY, &librpip_uart_dev[1])) {
+							librpip_feature_set |= LIBRPIP_FEATURE_UART1;  
+						} else {
+							//device exists but we cant RW it
+							librpip_error_code=0x607;					
+							librpip_error_data=id;
+						}	
+					}
+				} else {
+					//device does not exist
+					librpip_error_code=0x606;						
+					librpip_error_data=id;
 				}
 			} else {
-				//device does not exist
-				librpip_uart_dev_loaded[id]=0;
-				librpip_error_code=0x606;						
-				librpip_error_data=id;
+				//module is not active
+				librpip_error_code=0x608;						
+				librpip_error_data=id;					
 			}
 			break;
 		default:

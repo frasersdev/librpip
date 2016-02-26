@@ -25,7 +25,6 @@
 
 
 //sysfs files
-#define LIBRPIP_SYSFS_PWM_MODULE	"/sys/class/pwm/pwmchip0"
 #define LIBRPIP_SYSFS_PWM0		"/sys/class/pwm/pwmchip0/pwm0"
 #define LIBRPIP_SYSFS_PWM1		"/sys/class/pwm/pwmchip0/pwm1"
 
