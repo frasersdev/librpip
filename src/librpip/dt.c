@@ -36,8 +36,8 @@ uint32_t librpip_dt_module_enabled(uint32_t moduleid) {
 	char status[10];
 
 	if(librpip_dt_module_exists(moduleid)) {
-		if(librpip_dt_file_get_str(moduleid, LIBRPIP_DT_FILE_STATUS_ID, &status[0], 10)) {				
-			if(strcmp((const char *)&status[0],"disabled")) {			
+		if(librpip_dt_file_get_str(moduleid, LIBRPIP_DT_FILE_STATUS_ID, &status[0], 10)) {
+			if(strcmp((const char *)&status[0],"disabled")) {
 				return 1;
 			}
 		}

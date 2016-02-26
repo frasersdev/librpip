@@ -213,8 +213,9 @@ uint32_t librpip_spi_validate_spixcsx(uint32_t id, uint32_t cs, int* fd) {
 					if(librpip_spi_cs[0][cs])  {
 						*fd=librpip_spi_cs_dev[0][cs];
 					} else {
-						librpip_error_code=0x204;
+						librpip_error_code=0x208;
 						librpip_error_data=id;
+						librpip_error_extra=cs;
 					}
 				} else {
 					librpip_error_code=0x203;
@@ -233,8 +234,9 @@ uint32_t librpip_spi_validate_spixcsx(uint32_t id, uint32_t cs, int* fd) {
 					if(librpip_spi_cs[1][cs])  {
 						*fd=librpip_spi_cs_dev[1][cs];
 					} else {
-						librpip_error_code=0x204;
+						librpip_error_code=0x208;
 						librpip_error_data=id;
+						librpip_error_extra=cs;
 					}
 				} else {
 					librpip_error_code=0x203;

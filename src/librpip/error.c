@@ -124,7 +124,10 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			break;	
 		case 0x207:
 			snprintf(desc, len, "[librpip INFO   ] No SPI%u functions available. SPI%u module is not enabled. Consult /boot/overlays/README. Pins are available to GPIO\n", librpip_error_data , librpip_error_data);
-			break;						
+			break;
+		case 0x208:
+			snprintf(desc, len, "[librpip WARNING] Ignoring request. No SPI%u functions available on CS%u as it was not initialised.\n", librpip_error_data, librpip_error_extra);
+			break;									
 		case 0x210:
 			snprintf(desc, len, "[librpip ERROR  ] Unable to read SPI%u Mode (SPI_IOC_RD_MODE). Error 0x%x (%s)\n", librpip_error_data, librpip_error_extra, strerror(librpip_error_extra) );
 			break;				
