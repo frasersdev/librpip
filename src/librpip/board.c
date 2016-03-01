@@ -204,15 +204,18 @@ void librpip_board_model_print() {
 		case LIBRPIP_BOARD_PI_B_PLUS:
 			fprintf(stderr,"[librpip INFO   ] Raspberry PI Model B+ detected.\n");
 			break;
-		case LIBRPIP_BOARD_PI2_B:
-			fprintf(stderr,"[librpip INFO   ] Raspberry PI 2 Model B detected.\n");
-			break;
 		case LIBRPIP_BOARD_PI_ZERO:
 			fprintf(stderr,"[librpip INFO   ] Raspberry PI Zero detected.\n");
 			break;
 		case LIBRPIP_BOARD_PI_COMPUTE:
 			fprintf(stderr,"[librpip INFO   ] Raspberry PI Compute Module detected.\n");
 			break;	
+		case LIBRPIP_BOARD_PI2_B:
+			fprintf(stderr,"[librpip INFO   ] Raspberry PI 2 Model B detected.\n");
+			break;	
+		case LIBRPIP_BOARD_PI3_B:
+			fprintf(stderr,"[librpip INFO   ] Raspberry PI 3 Model B detected.\n");
+			break;						
 		default:
 			fprintf(stderr,"[librpip ERROR  ] Unable to detect board.\n");
 	}
