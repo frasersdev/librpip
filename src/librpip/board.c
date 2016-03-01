@@ -166,7 +166,10 @@ uint32_t librpip_board_detect(void) {
 				case 0xa01041:
 				case 0xa21041:
 					librpip_board=LIBRPIP_BOARD_PI2_B;
-					break;					
+					break;	
+				case 0xa22082:	
+					librpip_board=LIBRPIP_BOARD_PI3_B;
+					break;								
 				case 0:
 				default:
 					librpip_error_code=0x012;
