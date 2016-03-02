@@ -167,6 +167,7 @@ uint32_t librpip_board_detect(void) {
 				case 0xa21041:
 					librpip_board=LIBRPIP_BOARD_PI2_B;
 					break;	
+				case 0xa02082:											
 				case 0xa22082:	
 					librpip_board=LIBRPIP_BOARD_PI3_B;
 					break;								
