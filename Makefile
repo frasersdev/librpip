@@ -4,7 +4,7 @@ EDIRS = src/examples/basic  src/examples/i2c-lcd src/examples/i2c-th02 src/examp
 INSTALL	= /usr/local
 
 SO_VERSION = 0
-REL_VERSION = 0.3.0
+REL_VERSION = 0.3.2
 
 all :
 	@set -e; for d in $(DIRS); do $(MAKE) -C $$d -j SO_VERSION=${SO_VERSION} REL_VERSION=${REL_VERSION}; done

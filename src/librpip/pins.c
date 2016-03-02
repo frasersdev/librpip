@@ -97,7 +97,11 @@ uint32_t librpip_pins_getpins_from_dt(uint32_t fid) {
 			break;	
 		case LIBRPIP_FEATURE_SPI0:
 			librpip_dt_file_get_raw(LIBRPIP_DT_MODULE_GPIO_ID, LIBRPIP_DT_FILE_SPI0_PINS_ID, &dtconf[0], 40, &rlen);
-			if(rlen==12) {
+			if(rlen==20) {
+				pins = ((1 << dtconf[3]) | (1 << dtconf[7]) | (1 << dtconf[11]) | (1 << dtconf[15]) | (1 << dtconf[19])) & LIBRPIP_PINS_SPI0;
+				librpip_spi_cs[0][0] = 1;
+				librpip_spi_cs[0][1] = 1;
+			} else 	if(rlen==12) {
 				pins = ((1 << dtconf[3]) | (1 << dtconf[7]) | (1 << dtconf[11])) & LIBRPIP_PINS_SPI0;
 				librpip_dt_file_get_raw(LIBRPIP_DT_MODULE_GPIO_ID, LIBRPIP_DT_FILE_SPI0_CSPINS_ID, &dtconf[0], 40, &rlen);
 				if(rlen>=4) {
@@ -109,6 +113,8 @@ uint32_t librpip_pins_getpins_from_dt(uint32_t fid) {
 					pins |= (1 << dtconf[7]);				
 				}
 			} else {
+				librpip_spi_cs[0][0] = 1;
+				librpip_spi_cs[0][1] = 1;
 				pins=LIBRPIP_PINS_SPI0;  //default standard pins - or is it better to fail?			
 			}
 			break;		
@@ -130,6 +136,9 @@ uint32_t librpip_pins_getpins_from_dt(uint32_t fid) {
 					pins |= (1 << dtconf[11]);				
 				}				
 			} else {
+				librpip_spi_cs[1][0] = 1;
+				librpip_spi_cs[1][1] = 1;
+				librpip_spi_cs[1][2] = 1;
 				pins=LIBRPIP_PINS_SPI1;  //default standard pins - or is it better to fail?			
 			}
 			break;				

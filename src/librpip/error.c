@@ -249,7 +249,7 @@ uint32_t librpipErrorGetDescription(char* desc, int len) {
 			
 // SPI			
 		case 0x200:
-			snprintf(desc, len, "No SPI%u functions available. /dev/spidev%u.x does not exist (spidev blaclisted?). Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
+			snprintf(desc, len, "No SPI%u functions available. /dev/spidev%u.x does not exist (spidev blacklisted?). Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
 			break;	
 		case 0x201:
 			snprintf(desc, len, "No SPI%u functions available. Unable to open /dev/spidev%u.x for writing (user permissions?). Pins NOT available to GPIO\n", librpip_error_data, librpip_error_data);
