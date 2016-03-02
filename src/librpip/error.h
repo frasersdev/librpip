@@ -22,8 +22,13 @@
 #ifndef LIBRPIP_ERROR_H
 #define LIBRPIP_ERROR_H
 
+#define LIBRPIP_ERROR_MSG_INFO		1
+#define LIBRPIP_ERROR_MSG_WARNING	2
+#define LIBRPIP_ERROR_MSG_ERROR		3
+
 //functions
 uint32_t librpipErrorGetCode(void);
+uint32_t librpipErrorGetSeverity(void);
 uint32_t librpipErrorGetDescription(char* desc, int len);
 void librpipErrorPrint(void);
 

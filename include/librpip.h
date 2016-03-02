@@ -71,6 +71,12 @@
 #define LIBRPIP_FEATURE_PWM1			0x100
 
 
+//Error Severity
+#define LIBRPIP_ERROR_MSG_INFO			1
+#define LIBRPIP_ERROR_MSG_WARNING		2
+#define LIBRPIP_ERROR_MSG_ERROR			3
+
+
 /*
  *   GPIO Defines
  */
@@ -261,6 +267,7 @@ uint32_t librpipUartRead(uint32_t id, void* buf, uint16_t len, uint32_t timeout)
  *   Error Functions
  */
 uint32_t librpipErrorGetCode(void);
+uint32_t librpipErrorGetSeverity(void);
 uint32_t librpipErrorGetDescription(char* desc, int len);
 void 	 librpipErrorPrint(void);
 
