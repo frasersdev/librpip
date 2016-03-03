@@ -1,9 +1,9 @@
 # $Id: Makefile,v 1.8 2004/12/04 00:30:34 bsd Exp $
 
-TARGET = devrpip
+TARGET = sockrpip
 
-SRCS = devrpip.c
-OBJS = devrpip.o
+SRCS = sockrpip.c
+OBJS = sockrpip.o
 
 
 OPTIMIZE = -O3
@@ -41,4 +41,4 @@ depend :
 	
 
 # DO NOT DELETE (Dependencies follow)
-pwmclk.o: pwmclk.c
+

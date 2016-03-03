@@ -1,10 +1,10 @@
-DIRS = src/librpip src/pwmclk
-EDIRS = src/examples/basic  src/examples/i2c-lcd src/examples/i2c-th02 src/examples/i2c-mpu6500 src/examples/pwm src/examples/spi-mcp3002 src/examples/spi-mcp3202  src/examples/uart
+DIRS = src/librpip src/pwmclk src/sockrpip
+EDIRS = src/examples/basic  src/examples/i2c-lcd src/examples/i2c-th02 src/examples/i2c-mpu6500 src/examples/pwm src/examples/spi-mcp3002 src/examples/socktest src/examples/spi-mcp3202  src/examples/uart
 
 INSTALL	= /usr/local
 
 SO_VERSION = 0
-REL_VERSION = 0.3.2
+REL_VERSION = 0.4.0
 
 all :
 	@set -e; for d in $(DIRS); do $(MAKE) -C $$d -j SO_VERSION=${SO_VERSION} REL_VERSION=${REL_VERSION}; done
