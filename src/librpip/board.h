@@ -68,6 +68,7 @@
 
 #define LIBRPIP_BOARD_CPUINFO			"/proc/cpuinfo"
 
+uint32_t librpipBoardGetDescription(char* desc, int len);
 
 //internal functions
 uint32_t librpip_board_get_capabilities(void);

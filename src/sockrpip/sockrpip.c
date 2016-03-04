@@ -8,7 +8,9 @@
 uint32_t setup_socket(int* fd);
 uint32_t do_command(int* fd);
 uint32_t get_variable(int* cl, char* cmdstr);
+uint32_t run_i2c_function(int* cl, char* cmdstr);
 uint32_t run_pwm_function(int* cl, char* cmdstr);
+uint32_t run_spi_function(int* cl, char* cmdstr);
 
 uint32_t get_param_uint(uint32_t* error);
 float get_param_float(uint32_t* error);
@@ -68,22 +70,24 @@ uint32_t do_command(int* fd) {
 	if((cl = accept(*fd, NULL, NULL)) == -1) {
 		return 0;
 	}	
-	
-	printf("Client Connected\n");
-
 	rc=read(cl,buf,sizeof(buf)-1);
 	
 	if(rc > 2 ) {
 		buf[rc]='\0';
-		printf("Client sent %u bytes (%s)\n", rc, buf);
+		printf("Client sent request '%s'\n", buf);
 		switch(buf[0]) {
 			case 'V':
 				get_variable(&cl,&buf[2]);
-				break;					
+				break;	
+			case 'I':
+				run_i2c_function(&cl,&buf[2]);
+				break;								
 			case 'P':
 				run_pwm_function(&cl,&buf[2]);
-				printf("CMD: %c = pwm function\n", buf[0]);
 				break;
+			case 'S':
+				run_spi_function(&cl,&buf[2]);
+				break;					
 			default:
 				printf("Unknown CMD: %c\n", buf[0]);
 		}
@@ -125,7 +129,13 @@ uint32_t get_variable(int* cl, char* cmdstr) {
 	if(!strncmp("BoardID",var,7)) {
 		valid=1;
 		sprintf(buf,"Y %u\n",librpipGetBoardID());	
-	}			
+	}
+	else if(!strncmp("BoardDesc",var,9)) {
+		valid=1;
+		char desc[100];
+		librpipBoardGetDescription(&desc[0],sizeof(desc));
+		sprintf(buf,"Y %s\n",desc);	
+	} 				
 	else if(!strncmp("FeatureSet",var,10)) {
 		valid=1;
 		sprintf(buf,"Y %u\n",feature_set);
@@ -136,15 +146,62 @@ uint32_t get_variable(int* cl, char* cmdstr) {
 		librpipVersionStr(&ver[0],sizeof(ver));
 		sprintf(buf,"Y %s\n",ver);	
 	} 
-
+	
 	if(!valid) {
-		printf("Unknown variable %s\n", var);
-		return 0;
+		sprintf(buf,"X Unknown Variable %s\n",var);
 	}
 	
 	write(*cl,buf,strlen(buf));
 	return 1;	
 }
+
+uint32_t run_i2c_function(int* cl, char* cmdstr) {
+	char *func;
+	char buf[350];
+	uint32_t valid;
+	uint32_t param_error;
+
+	valid=0;
+	param_error=0;	
+	
+	func = strtok(cmdstr, " ");
+	
+	if(!strncmp("I2cConfigRead",func,13)) {
+		valid=1;
+		uint32_t id = get_param_uint(&param_error);
+		uint32_t flags;
+		
+		if(param_error) {
+			get_syntax_response(&buf[0], sizeof(buf),1);
+		} else {
+			if(librpipI2cConfigRead(id, &flags)) 
+				sprintf(buf,"Y %u", flags);	
+			else 
+				get_error_response(&buf[0], sizeof(buf));
+		}	
+	}	
+	else if(!strncmp("I2cConfigWrite",func,14)) {
+		valid=1;
+		uint32_t id 	= get_param_uint(&param_error);
+		uint32_t flags	= get_param_uint(&param_error);
+		
+		if(param_error) {
+			get_syntax_response(&buf[0], sizeof(buf),2);
+		} else {				
+			if(librpipI2cConfigWrite(id, flags)) 
+				sprintf(buf,"Y");	
+			else 
+				get_error_response(&buf[0], sizeof(buf));
+		}		
+	}		
+	if(!valid) {
+		sprintf(buf,"X Unknown I2C Function %s", func);
+	}
+	
+	write(*cl,buf,strlen(buf));
+	return 1;
+}	
+	
 
 uint32_t run_pwm_function(int* cl, char* cmdstr) {
 	char *func;
@@ -169,7 +226,7 @@ uint32_t run_pwm_function(int* cl, char* cmdstr) {
 			get_syntax_response(&buf[0], sizeof(buf),1);
 		} else {
 			if(librpipPwmConfigRead(id, &pin, &period, &duty_cycle, &flags)) 
-				sprintf(buf,"Y %u %u %u %u\n",pin, period, duty_cycle, flags);	
+				sprintf(buf,"Y %u %u %u %u",pin, period, duty_cycle, flags);	
 			else 
 				get_error_response(&buf[0], sizeof(buf));
 		}	
@@ -185,7 +242,7 @@ uint32_t run_pwm_function(int* cl, char* cmdstr) {
 			get_syntax_response(&buf[0], sizeof(buf),4);
 		} else {				
 			if(librpipPwmConfigWrite(id, period, duty_cycle, flags)) 
-				sprintf(buf,"Y\n");	
+				sprintf(buf,"Y");	
 			else 
 				get_error_response(&buf[0], sizeof(buf));
 		}		
@@ -199,7 +256,7 @@ uint32_t run_pwm_function(int* cl, char* cmdstr) {
 			get_syntax_response(&buf[0], sizeof(buf),1);
 		} else {
 			if(librpipPwmStatusRead(id, &status)) 
-				sprintf(buf,"Y %u\n",status);	
+				sprintf(buf,"Y %u",status);	
 			else 
 				get_error_response(&buf[0], sizeof(buf));
 		}	
@@ -213,7 +270,7 @@ uint32_t run_pwm_function(int* cl, char* cmdstr) {
 			get_syntax_response(&buf[0], sizeof(buf),2);
 		} else {		
 			if(librpipPwmStatusWrite(id,status)) 
-				sprintf(buf,"Y\n");	
+				sprintf(buf,"Y");	
 			else 
 				get_error_response(&buf[0], sizeof(buf));
 		}	
@@ -227,7 +284,7 @@ uint32_t run_pwm_function(int* cl, char* cmdstr) {
 			get_syntax_response(&buf[0], sizeof(buf),2);
 		} else {		
 			if(librpipPwmDutyPercentWrite(id,duty)) 
-				sprintf(buf,"Y\n");	
+				sprintf(buf,"Y");	
 			else 
 				get_error_response(&buf[0], sizeof(buf));
 		}
@@ -243,7 +300,7 @@ uint32_t run_pwm_function(int* cl, char* cmdstr) {
 			get_syntax_response(&buf[0], sizeof(buf),1);
 		} else {		
 			if(librpipServoConfigRead(id, &range, &pmin, &pmax)) 
-				sprintf(buf,"Y %u %u %u\n", range, pmin, pmax);	
+				sprintf(buf,"Y %u %u %u", range, pmin, pmax);	
 			else 
 				get_error_response(&buf[0], sizeof(buf));
 		}	
@@ -259,7 +316,7 @@ uint32_t run_pwm_function(int* cl, char* cmdstr) {
 			get_syntax_response(&buf[0], sizeof(buf),4);
 		} else {		
 			if(librpipServoConfigWrite(id, range, pmin, pmax)) 
-				sprintf(buf,"Y\n");	
+				sprintf(buf,"Y");	
 			else 
 				get_error_response(&buf[0], sizeof(buf));
 		}		
@@ -273,33 +330,94 @@ uint32_t run_pwm_function(int* cl, char* cmdstr) {
 			get_syntax_response(&buf[0], sizeof(buf),2);
 		} else {		
 			if(librpipServoPositionWrite(id,angle)) 
-				sprintf(buf,"Y\n");	
+				sprintf(buf,"Y");	
 			else 
 				get_error_response(&buf[0], sizeof(buf));
 		}		
 	}
 
 	if(!valid) {
-		printf("Unknown function %s\n", func);
-		return 0;
+		sprintf(buf,"X Unknown PWM Function %s", func);
 	}
 	
 	write(*cl,buf,strlen(buf));
 	return 1;	
 }
 
+uint32_t run_spi_function(int* cl, char* cmdstr) {
+	char *func;
+	char buf[350];
+	uint32_t valid;
+	uint32_t param_error;
+
+	valid=0;
+	param_error=0;	
+	
+	func = strtok(cmdstr, " ");
+
+	if(!strncmp("SpiConfigRead",func,13)) {
+		valid=1;
+		uint32_t id = get_param_uint(&param_error);
+		uint32_t cs = get_param_uint(&param_error);
+		uint32_t spi_mode;
+		uint32_t lsb_first;
+		uint32_t bits_per_word; 
+		uint32_t max_speed; 
+		uint32_t spi_flags;
+		
+		if(param_error) {
+			get_syntax_response(&buf[0], sizeof(buf),2);
+		} else {
+			if(librpipSpiConfigRead(id, cs, &spi_mode, &lsb_first, &bits_per_word, &max_speed, &spi_flags)) 
+				sprintf(buf,"Y %u %u %u %u %u", spi_mode, lsb_first, bits_per_word, max_speed, spi_flags);	
+			else 
+				get_error_response(&buf[0], sizeof(buf));
+		}	
+	}	
+	else if(!strncmp("SpiConfigWrite",func,14)) {
+		valid=1;
+		uint32_t id 		= get_param_uint(&param_error);
+		uint32_t cs		= get_param_uint(&param_error);
+		uint32_t spi_mode	= get_param_uint(&param_error); 
+		uint32_t max_speed	= get_param_uint(&param_error); 
+		uint32_t spi_flags	= get_param_uint(&param_error);
+		if(param_error) {
+			get_syntax_response(&buf[0], sizeof(buf),5);
+		} else {				
+			if( librpipSpiConfigWrite(id, cs, spi_mode, max_speed, spi_flags)) 
+				sprintf(buf,"Y");	
+			else 
+				get_error_response(&buf[0], sizeof(buf));
+		}		
+	}		
+	if(!valid) {
+		sprintf(buf,"X Unknown SPI Function %s", func);
+	}
+	
+	write(*cl,buf,strlen(buf));
+	return 1;
+}
 
 void get_error_response(char* desc, int len) {
 
 	char errordesc[300];
 	librpipErrorGetDescription(&errordesc[0], sizeof(errordesc));
-	snprintf(desc, len, "N %u %u %s\n",librpipErrorGetSeverity(),librpipErrorGetCode(),errordesc);
-
+	switch(librpipErrorGetSeverity()) {
+		case LIBRPIP_ERROR_MSG_INFO:
+			snprintf(desc, len, "N Info: 0x%x %s",librpipErrorGetCode(),errordesc);
+			break;			
+		case LIBRPIP_ERROR_MSG_WARNING:
+			snprintf(desc, len, "N Warning: 0x%x %s",librpipErrorGetCode(),errordesc);
+			break;		
+		case LIBRPIP_ERROR_MSG_ERROR:
+			snprintf(desc, len, "N Error: 0x%x %s",librpipErrorGetCode(),errordesc);
+			break;
+	}
 }
 
 void get_syntax_response(char* desc, int len, int val) {
 
-	snprintf(desc, len, "X Syntax Error. Parameter Count Mismatch. Expected %u\n",val);
+	snprintf(desc, len, "X Parameter Count Mismatch. Expected %u parameters",val);
 
 }
 

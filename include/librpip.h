@@ -199,6 +199,7 @@ void	 librpipClose(void);
 uint32_t librpipGetBoardID(void);
 void 	 librpipVersionStr(char* version, int len);
 void 	 librpipVersionInt(uint8_t* maj, uint8_t* min, uint8_t* sub);
+uint32_t librpipBoardGetDescription(char* desc, int len);
 
 /*
  *   GPIO Functions

@@ -32,6 +32,44 @@ extern uint32_t librpip_error_code;
 extern uint32_t librpip_error_data;
 extern uint32_t librpip_board;
 
+uint32_t librpipBoardGetDescription(char* desc, int len) {
+
+	switch(librpip_board) {
+		case LIBRPIP_BOARD_PI_A:
+			snprintf(desc, len, "Raspberry PI Model A.");
+			break;
+		case LIBRPIP_BOARD_PI_B_R1:
+			snprintf(desc, len, "Raspberry PI Model B Revision 1.");
+			break;
+		case LIBRPIP_BOARD_PI_B_R2:
+			snprintf(desc, len, "Raspberry PI Model B Revision 2.");
+			break;
+		case LIBRPIP_BOARD_PI_A_PLUS:
+			snprintf(desc, len, "Raspberry PI Model A+.");
+			break;
+		case LIBRPIP_BOARD_PI_B_PLUS:
+			snprintf(desc, len, "Raspberry PI Model B+.");
+			break;
+		case LIBRPIP_BOARD_PI_ZERO:
+			snprintf(desc, len, "Raspberry PI Zero.");
+			break;
+		case LIBRPIP_BOARD_PI_COMPUTE:
+			snprintf(desc, len, "Raspberry PI Compute Moduled.");
+			break;	
+		case LIBRPIP_BOARD_PI2_B:
+			snprintf(desc, len, "Raspberry PI 2 Model B.");
+			break;	
+		case LIBRPIP_BOARD_PI3_B:
+			snprintf(desc, len, "Raspberry PI 3 Model B");
+			break;						
+		default:
+			snprintf(desc, len, "Unknown board.");
+	}
+	return strlen(desc);
+			
+}
+
+
 uint32_t librpip_board_get_capabilities(void) {
 	switch(librpip_board) {
 		case LIBRPIP_BOARD_PI_A:
@@ -188,36 +226,8 @@ uint32_t librpip_board_detect(void) {
 }	
 
 void librpip_board_model_print() {
-	switch(librpip_board) {
-
-		case LIBRPIP_BOARD_PI_A:
-			fprintf(stderr,"[librpip INFO   ] Raspberry PI Model A detected.\n");
-			break;
-		case LIBRPIP_BOARD_PI_B_R1:
-			fprintf(stderr,"[librpip INFO   ] Raspberry PI Model B Revision 1 detected.\n");
-			break;
-		case LIBRPIP_BOARD_PI_B_R2:
-			fprintf(stderr,"[librpip INFO   ] Raspberry PI Model B Revision 2 detected.\n");
-			break;
-		case LIBRPIP_BOARD_PI_A_PLUS:
-			fprintf(stderr,"[librpip INFO   ] Raspberry PI Model A+ detected.\n");
-			break;
-		case LIBRPIP_BOARD_PI_B_PLUS:
-			fprintf(stderr,"[librpip INFO   ] Raspberry PI Model B+ detected.\n");
-			break;
-		case LIBRPIP_BOARD_PI_ZERO:
-			fprintf(stderr,"[librpip INFO   ] Raspberry PI Zero detected.\n");
-			break;
-		case LIBRPIP_BOARD_PI_COMPUTE:
-			fprintf(stderr,"[librpip INFO   ] Raspberry PI Compute Module detected.\n");
-			break;	
-		case LIBRPIP_BOARD_PI2_B:
-			fprintf(stderr,"[librpip INFO   ] Raspberry PI 2 Model B detected.\n");
-			break;	
-		case LIBRPIP_BOARD_PI3_B:
-			fprintf(stderr,"[librpip INFO   ] Raspberry PI 3 Model B detected.\n");
-			break;						
-		default:
-			fprintf(stderr,"[librpip ERROR  ] Unable to detect board.\n");
+	char desc[100]={0};
+	if(librpipBoardGetDescription(&desc[0], sizeof(desc))) {
+		fprintf(stderr,"[librpip INFO   ] %s\n",desc);
 	}
 }
