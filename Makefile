@@ -1,5 +1,4 @@
 DIRS = src/librpip src/pwmclk 
-SDIRS = src/sockrpip src/examples/socktest 
 EDIRS = src/examples/basic  src/examples/i2c-lcd src/examples/i2c-th02 src/examples/i2c-mpu6500 src/examples/pwm src/examples/spi-mcp3002 src/examples/spi-mcp3202  src/examples/uart
 
 INSTALL	= /usr/local
@@ -9,9 +8,6 @@ REL_VERSION = 0.4.0
 
 all :
 	@set -e; for d in $(DIRS); do $(MAKE) -C $$d -j SO_VERSION=${SO_VERSION} REL_VERSION=${REL_VERSION}; done
-	
-sockrpip :
-	@set -e; for d in $(SDIRS); do $(MAKE) -C $$d ; done	
 
 examples :
 	@set -e; for d in $(EDIRS); do $(MAKE) -C $$d ; done
