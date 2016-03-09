@@ -224,6 +224,7 @@ uint32_t librpipServoPositionWrite(uint32_t id, float angle);
  *   Transaction Functions
  */
 struct librpip_tx*	librpipTransactionCreate(uint8_t mode, uint8_t bpw);
+void 			librpipTransactionConfigRead(struct librpip_tx* t, uint8_t* mode, uint8_t* bpw, uint8_t* status, uint16_t* len);
 uint32_t 		librpipTransactionMsgAdd(struct librpip_tx* t, uint8_t dir, void* txbuf, uint16_t len);
 uint32_t 		librpipTransactionMsgAddRegRead(struct librpip_tx* t, uint8_t reg, uint16_t len);
 uint32_t 		librpipTransactionMsgAddRegWrite(struct librpip_tx* t, uint8_t reg, uint8_t value);

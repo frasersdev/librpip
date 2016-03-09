@@ -68,6 +68,7 @@ struct librpip_transaction_t {
 
 //exposed functions
 struct librpip_transaction_t* 	librpipTransactionCreate(uint8_t mode, uint8_t bpw);
+void 				librpipTransactionConfigRead(struct librpip_transaction_t* t, uint8_t* mode, uint8_t* bpw, uint8_t* status, uint16_t* len);
 uint32_t 			librpipTransactionMsgAdd(struct librpip_transaction_t* t, uint8_t dir, void* txbuf, uint16_t len);
 uint32_t 			librpipTransactionMsgAddRegRead(struct librpip_transaction_t* t, uint8_t reg, uint16_t len);
 uint32_t 			librpipTransactionMsgAddRegWrite(struct librpip_transaction_t* t, uint8_t reg, uint8_t value);

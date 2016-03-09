@@ -77,6 +77,16 @@ struct librpip_transaction_t* librpipTransactionCreate(uint8_t mode, uint8_t bpw
 	}
 }
 
+void librpipTransactionConfigRead(struct librpip_transaction_t* t, uint8_t* mode, uint8_t* bpw, uint8_t* status, uint16_t* len) {
+
+	*mode=t->mode;
+	*bpw=t->bpw;
+	*status=t->status;
+	*len=t->len;
+
+}
+
+
 uint32_t librpipTransactionMsgAddRegRead(struct librpip_transaction_t* t, uint8_t reg, uint16_t len) {
 
 	uint8_t buf[1];
