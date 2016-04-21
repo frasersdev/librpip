@@ -52,7 +52,7 @@ int main(int argc, char * argv[]) {
 	
 	uint32_t spi,cs,initok;
 	
-	spi=1;	
+	spi=0;	
 	cs=0;	
 	ave_volts=0;
 	initok=0;	
