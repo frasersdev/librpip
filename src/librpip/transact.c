@@ -323,7 +323,7 @@ uint32_t librpipTransactionRead(struct librpip_transaction_t* t, void* result, u
 					}	
 					if(m) {				// we are pointing at a receive message
 						i=0;
-					p=(uint8_t*)result;  //give the void pointer a type so we can loop though it
+						p=(uint8_t*)result;  //give the void pointer a type so we can loop though it
 						while(i < len && i < m->rx->len) {
 							p[i] = m->rx->buf[i];
 							i++;
