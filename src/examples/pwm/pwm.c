@@ -32,9 +32,6 @@
  */
 
 void display_feature_set(uint32_t fs);
-void display_gpio_valid_pins();
-void show_pin_config(uint32_t pin);
-void show_spi_config(uint32_t id, uint32_t cs);
 void show_pwm_config(uint32_t id);
 
 int main(int argc, char * argv[]) {
@@ -58,7 +55,8 @@ int main(int argc, char * argv[]) {
 		librpipPwmStatusWrite(0, LIBRPIP_PWM_STATUS_ON);
 		
 		librpipPwmConfigWrite(1, 20000, 0, LIBRPIP_PWM_FLAG_POLARITY_NORMAL);
-		librpipPwmStatusWrite(1, LIBRPIP_PWM_STATUS_ON);	
+		librpipPwmStatusWrite(1, LIBRPIP_PWM_STATUS_ON);
+		//a servo with 180 degrees of movement, .9ms pulse = -90 and 2.1ms pulse = +90 	
 		librpipServoConfigWrite(1, 180, 900, 2100);	
 
 
