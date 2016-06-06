@@ -161,6 +161,7 @@ uint32_t librpip_board_detect(void) {
 					librpip_board=LIBRPIP_BOARD_PI_COMPUTE;
 					break;
 				case 0x900092:
+				case 0x900093:
 					librpip_board=LIBRPIP_BOARD_PI_ZERO;
 					break;
 				case 0xa01041:
