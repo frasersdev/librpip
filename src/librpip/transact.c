@@ -365,11 +365,8 @@ uint32_t librpipTransactionRead(struct librpip_transaction_t* t, void* result, u
 
 uint32_t librpipTransactionReadSize(struct librpip_transaction_t* t, uint16_t* size) {
 
-	uint16_t i;
 	librpip_error_code=0;
 	librpip_error_data=0;
-	
-	uint8_t* p;
 
 	*size=0;
 		

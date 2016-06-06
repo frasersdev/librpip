@@ -237,7 +237,7 @@ uint32_t 		librpipTransactionMsgVarAdd(struct librpip_tx* t, uint8_t dir, char v
 uint32_t 		librpipTransactionMsgVarSet(struct librpip_tx* t, char var,  void* txbuf, uint16_t len);
 uint32_t 		librpipTransactionSend(struct librpip_tx* t, uint32_t device, uint32_t client);
 uint32_t		librpipTransactionRead(struct librpip_tx* t, void* result, uint16_t len);
-uint32_t 		librpipTransactionReadSize(struct librpip_tx* t, uint16_t* size) {
+uint32_t 		librpipTransactionReadSize(struct librpip_tx* t, uint16_t* size);
 uint32_t 		librpipTransactionDestroy(struct librpip_tx* t); 
  
 
