@@ -26,6 +26,8 @@
 #define LIBRPIP_OFF				0
 #define LIBRPIP_ON				1
 
+#define LIBRPIP_API_VERSION			1.1
+
 
 /*
  *   Library Defines
