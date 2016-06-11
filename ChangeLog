@@ -1,3 +1,21 @@
+0.4.0
+Released  11/6/2016
+
+* Support for PI zero revision 1.3 (with camera connector)
+* Two new transaction functions
+  o librpipTransactionConfigRead - returns the current state of a transaction
+  o librpipTransactionReadSize - returns the number of bytes to hold the next read
+* Separated error severity from description
+* One new error function
+  o librpipErrorGetSeverity - returns the error severity.
+* Added new constants for error severity
+  o LIBRPIP_ERROR_MSG_INFO
+  o LIBRPIP_ERROR_MSG_WARNING
+  o LIBRPIP_ERROR_MSG_ERROR
+* Added new constant LIBRPIP_API_VERSION so clients can detect available API functions
+* minor cleanups of the examples
+
+
 0.3.2
 Released  2/3/2016
 
