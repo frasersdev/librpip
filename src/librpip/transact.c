@@ -77,6 +77,16 @@ struct librpip_transaction_t* librpipTransactionCreate(uint8_t mode, uint8_t bpw
 	}
 }
 
+void librpipTransactionConfigRead(struct librpip_transaction_t* t, uint8_t* mode, uint8_t* bpw, uint8_t* status, uint16_t* len) {
+
+	*mode=t->mode;
+	*bpw=t->bpw;
+	*status=t->status;
+	*len=t->len;
+
+}
+
+
 uint32_t librpipTransactionMsgAddRegRead(struct librpip_transaction_t* t, uint8_t reg, uint16_t len) {
 
 	uint8_t buf[1];
@@ -323,7 +333,7 @@ uint32_t librpipTransactionRead(struct librpip_transaction_t* t, void* result, u
 					}	
 					if(m) {				// we are pointing at a receive message
 						i=0;
-					p=(uint8_t*)result;  //give the void pointer a type so we can loop though it
+						p=(uint8_t*)result;  //give the void pointer a type so we can loop though it
 						while(i < len && i < m->rx->len) {
 							p[i] = m->rx->buf[i];
 							i++;
@@ -353,6 +363,46 @@ uint32_t librpipTransactionRead(struct librpip_transaction_t* t, void* result, u
 	return librpip_error_code ? 0 : 1;
 }
 
+uint32_t librpipTransactionReadSize(struct librpip_transaction_t* t, uint16_t* size) {
+
+	librpip_error_code=0;
+	librpip_error_data=0;
+
+	*size=0;
+		
+	if(t) {
+		switch(t->status) {
+			case LIBRPIP_TX_STATUS_SENTOK:
+				if(t->curr_msg) {
+					struct librpip_msg_t* m = t->curr_msg;
+					while(m && !(m->dir & LIBRPIP_TX_MSG_RX) ) {
+						m=m->next;		//advance to the next one
+					}	
+					if(m) {				// we are pointing at a receive message
+						*size =  m->rx->len;
+					} else {
+						librpip_error_code=0x532;
+					}
+				} else {
+					librpip_error_code=0x531;
+				}
+				break;
+			case LIBRPIP_TX_STATUS_NEW:
+			case LIBRPIP_TX_STATUS_MSG:
+			case LIBRPIP_TX_STATUS_FAILED:
+			default:
+				librpip_error_code=0x533;
+				librpip_error_data=t->status;
+		}
+
+	} else {
+		librpip_error_code=0x530;
+	}
+	if(librpip_error_code) {	
+		if(librpip_flags & LIBRPIP_FLAG_DEBUG_ON) librpipErrorPrint();
+	}	
+	return librpip_error_code ? 0 : 1;
+}
 
 uint32_t librpipTransactionDestroy(struct librpip_transaction_t* t) {
 

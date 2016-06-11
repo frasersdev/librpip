@@ -26,6 +26,8 @@
 #define LIBRPIP_OFF				0
 #define LIBRPIP_ON				1
 
+#define LIBRPIP_API_VERSION			1.1
+
 
 /*
  *   Library Defines
@@ -71,6 +73,11 @@
 #define LIBRPIP_FEATURE_PWM1			0x100
 
 
+//Error Severity
+#define LIBRPIP_ERROR_MSG_INFO			1
+#define LIBRPIP_ERROR_MSG_WARNING		2
+#define LIBRPIP_ERROR_MSG_ERROR			3
+ 
 /*
  *   GPIO Defines
  */
@@ -224,6 +231,7 @@ uint32_t librpipServoPositionWrite(uint32_t id, float angle);
  *   Transaction Functions
  */
 struct librpip_tx*	librpipTransactionCreate(uint8_t mode, uint8_t bpw);
+void 			librpipTransactionConfigRead(struct librpip_tx* t, uint8_t* mode, uint8_t* bpw, uint8_t* status, uint16_t* len);
 uint32_t 		librpipTransactionMsgAdd(struct librpip_tx* t, uint8_t dir, void* txbuf, uint16_t len);
 uint32_t 		librpipTransactionMsgAddRegRead(struct librpip_tx* t, uint8_t reg, uint16_t len);
 uint32_t 		librpipTransactionMsgAddRegWrite(struct librpip_tx* t, uint8_t reg, uint8_t value);
@@ -231,6 +239,7 @@ uint32_t 		librpipTransactionMsgVarAdd(struct librpip_tx* t, uint8_t dir, char v
 uint32_t 		librpipTransactionMsgVarSet(struct librpip_tx* t, char var,  void* txbuf, uint16_t len);
 uint32_t 		librpipTransactionSend(struct librpip_tx* t, uint32_t device, uint32_t client);
 uint32_t		librpipTransactionRead(struct librpip_tx* t, void* result, uint16_t len);
+uint32_t 		librpipTransactionReadSize(struct librpip_tx* t, uint16_t* size);
 uint32_t 		librpipTransactionDestroy(struct librpip_tx* t); 
  
 
@@ -261,6 +270,7 @@ uint32_t librpipUartRead(uint32_t id, void* buf, uint16_t len, uint32_t timeout)
  *   Error Functions
  */
 uint32_t librpipErrorGetCode(void);
+uint32_t librpipErrorGetSeverity(void);
 uint32_t librpipErrorGetDescription(char* desc, int len);
 void 	 librpipErrorPrint(void);
 
