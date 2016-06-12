@@ -1,3 +1,9 @@
+0.4.1
+Not Released
+
+* Support alternate /usr/include/i2c-dev.h header file from libi2c-dev package.
+
+
 0.4.0
 Released  11/6/2016
 
