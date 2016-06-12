@@ -16,5 +16,6 @@ AC_CHECK_HEADER(sys/ioctl.h)
 AC_CHECK_HEADER(sys/mman.h)
 AC_CHECK_HEADER(sys/stat.h)
 AC_CHECK_HEADER(sys/types.h)
+AC_CHECK_MEMBERS(struct i2c_msg.addr,AC_DEFINE(LIBRPIP_HAVE_I2CMSG_IN_I2CDEV),,[#include <linux/i2c-dev.h>])
 AC_CHECK_MEMBERS(struct spi_ioc_transfer.tx_nbits,AC_DEFINE(LIBRPIP_HAVE_SPI_STRUCT_NBITS),,[#include <linux/spi/spidev.h>])
 cp confdefs.h src/librpip/config.h

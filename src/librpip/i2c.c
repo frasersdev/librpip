@@ -18,6 +18,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+ 
+#include "config.h"
+ 
 #include <stdio.h> 
 #include <stdint.h>
 #include <unistd.h>
@@ -25,7 +28,9 @@
 #include <errno.h>	
 #include <sys/types.h>	
 #include <sys/ioctl.h>
+#ifndef LIBRPIP_HAVE_I2CMSG_IN_I2CDEV
 #include <linux/i2c.h>
+#endif
 #include <linux/i2c-dev.h>
 
 

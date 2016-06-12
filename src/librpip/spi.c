@@ -18,6 +18,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#include "config.h"
  
 #include <stdint.h>
 #include <unistd.h>
@@ -35,7 +36,7 @@
 #include "pins.h"
 #include "transact.h"
 #include "spi.h"
-#include "config.h"
+
 
 extern uint32_t librpip_feature_set;
 extern uint32_t librpip_error_code;
