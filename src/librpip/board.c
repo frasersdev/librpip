@@ -52,6 +52,9 @@ uint32_t librpip_board_get_capabilities(void) {
 		case LIBRPIP_BOARD_PI_ZERO:
 			return LIBRPIP_BOARD_PI_ZERO_FEATURE;
 			break;
+		case LIBRPIP_BOARD_PI_ZERO_W:
+			return LIBRPIP_BOARD_PI_ZERO_W_FEATURE;
+			break;
 		case LIBRPIP_BOARD_PI_COMPUTE:
 			return  LIBRPIP_BOARD_PI_COMPUTE_FEATURE;
 			break;
@@ -84,6 +87,9 @@ uint32_t librpip_board_get_pins(void) {
 			break;
 		case LIBRPIP_BOARD_PI_ZERO:
 			return LIBRPIP_BOARD_PI_ZERO_PINS;
+			break;
+		case LIBRPIP_BOARD_PI_ZERO_W:
+			return LIBRPIP_BOARD_PI_ZERO_W_PINS;
 			break;
 		case LIBRPIP_BOARD_PI_COMPUTE:
 			return  LIBRPIP_BOARD_PI_COMPUTE_PINS;
@@ -164,6 +170,8 @@ uint32_t librpip_board_detect(void) {
 				case 0x900093:
 					librpip_board=LIBRPIP_BOARD_PI_ZERO;
 					break;
+				case 0x9000C1:
+					librpip_board=LIBRPIP_BOARD_PI_ZERO_W;				
 				case 0xa01041:
 				case 0xa21041:
 					librpip_board=LIBRPIP_BOARD_PI2_B;
@@ -208,6 +216,9 @@ void librpip_board_model_print() {
 			break;
 		case LIBRPIP_BOARD_PI_ZERO:
 			fprintf(stderr,"[librpip INFO   ] Raspberry PI Zero detected.\n");
+			break;
+		case LIBRPIP_BOARD_PI_ZERO_W:
+			fprintf(stderr,"[librpip INFO   ] Raspberry PI Zero WiFi detected.\n");
 			break;
 		case LIBRPIP_BOARD_PI_COMPUTE:
 			fprintf(stderr,"[librpip INFO   ] Raspberry PI Compute Module detected.\n");
