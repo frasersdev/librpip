@@ -3295,6 +3295,18 @@ if test "x$ac_cv_header_sys_types_h" = xyes; then :
 fi
 
 
+ac_fn_c_check_member "$LINENO" "struct i2c_msg" "addr" "ac_cv_member_struct_i2c_msg_addr" "#include <linux/i2c-dev.h>
+"
+if test "x$ac_cv_member_struct_i2c_msg_addr" = xyes; then :
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_STRUCT_I2C_MSG_ADDR 1
+_ACEOF
+
+$as_echo "#define LIBRPIP_HAVE_I2CMSG_IN_I2CDEV 1" >>confdefs.h
+
+fi
+
 ac_fn_c_check_member "$LINENO" "struct spi_ioc_transfer" "tx_nbits" "ac_cv_member_struct_spi_ioc_transfer_tx_nbits" "#include <linux/spi/spidev.h>
 "
 if test "x$ac_cv_member_struct_spi_ioc_transfer_tx_nbits" = xyes; then :

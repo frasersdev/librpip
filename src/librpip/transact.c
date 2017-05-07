@@ -18,13 +18,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
- 
+#include "config.h" 
 
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
+#ifndef LIBRPIP_HAVE_I2CMSG_IN_I2CDEV
 #include <linux/i2c.h>
+#endif
 #include <linux/i2c-dev.h>
 #include <linux/spi/spidev.h>
 
@@ -498,11 +500,21 @@ struct i2c_rdwr_ioctl_data* librpip_transaction_i2c_create(struct librpip_transa
 		p->addr = client;
 		if(m->dir & LIBRPIP_TX_MSG_TX) {
 			p->flags = 0; 
+#ifdef LIBRPIP_HAVE_I2CMSG_IN_I2CDEV
+//annoyingly the libi2c-dev package uses a different type than the kernel i2c-dev.h	
+			p->buf = (char*)m->tx->buf;
+#else		
 			p->buf = m->tx->buf;
+#endif
 			p->len = m->tx->len;
 		} else { 
 			p->flags = I2C_M_RD;
+#ifdef LIBRPIP_HAVE_I2CMSG_IN_I2CDEV
+//annoyingly the libi2c-dev package uses a different type than the kernel i2c-dev.h	
+			p->buf = (char*)m->rx->buf;
+#else				
 			p->buf = m->rx->buf;
+#endif
 			p->len = m->rx->len;
 		}
 		p++;
